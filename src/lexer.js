@@ -1,6 +1,6 @@
 import { Lexer } from 'chevrotain';
 import tokens from './tokens';
 
-export const lexer = new Lexer(tokens);
+export const Lexer = Lexer;
 
-export default lexer;
+export default new Lexer(tokens);
