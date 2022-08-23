@@ -10,7 +10,7 @@ export const bracket_square_open = createToken({
   pattern: /\[/,
 });
 
-export default [
+export default {
   bracket_square_close,
   bracket_square_open,
-];
+};

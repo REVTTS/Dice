@@ -10,7 +10,7 @@ export const bracket_curley_open = createToken({
   pattern: /\{/,
 });
 
-export default [
+export default {
   bracket_curley_close,
   bracket_curley_open,
-];
+};

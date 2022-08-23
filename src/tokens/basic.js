@@ -1,7 +1,7 @@
-import { createToken } from "chevrotain";
+import { createToken, Lexer } from "chevrotain";
 
-export const integer = createToken({
-  name: 'integer',
+export const digit = createToken({
+  name: 'digit',
   pattern: /\d/,
 });
 
@@ -15,8 +15,15 @@ export const whitespace = createToken({
   pattern: /\S/,
 });
 
-export default [
+export const whitespace_skip = createToken({
+  group: Lexer.SKIPPED,
+  name: 'whitespace',
+  pattern: /\S/
+})
+
+export default {
   character,
-  integer,
+  digit,
   whitespace,
-];
+  whitespace_skip,
+};

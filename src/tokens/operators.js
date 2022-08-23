@@ -20,9 +20,9 @@ export const plus = createToken({
   pattern: /\+/,
 });
 
-export default [
+export default {
   asterisk,
   forward_slash,
   minus,
   plus,
-];
+};

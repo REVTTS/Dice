@@ -10,7 +10,7 @@ export const bracket_angle_open = createToken({
   pattern: /\</,
 });
 
-export default [
+export default {
   bracket_angle_close,
   bracket_angle_open,
-];
+};
