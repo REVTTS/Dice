@@ -7,16 +7,17 @@
   "license": "N/A",
   "scripts": {
     "build": "webpack --env production",
-    "dev": "webpack --env development --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "mochapack --webpack-config webpack.config.test.js \"src/**/*.test.js\" --watch",
+    "test": "mochapack --webpack-config webpack.config.test.js \"src/**/*.test.js\""
   },
   "dependencies": {
     "chevrotain": "^10.3.0"
   },
   "devDependencies": {
     "mocha": "^10.0.0",
-    "mocha-loader": "^5.1.5",
+    "mochapack": "^2.1.4",
     "webpack": "^5.74.0",
-    "webpack-cli": "^4.10.0"
+    "webpack-cli": "^4.10.0",
+    "webpack-node-externals": "^3.0.0"
   }
 }
