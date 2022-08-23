@@ -2,22 +2,22 @@ import { createToken } from "chevrotain";
 
 export const asterisk = createToken({
   name: 'asterisk',
-  pattern: /\*/
+  pattern: /\*/,
 });
 
 export const forward_slash = createToken({
   name: 'forward_slash',
-  pattern: /\//
+  pattern: /\//,
 });
 
 export const minus = createToken({
   name: 'minus',
-  pattern: /\-/
+  pattern: /\-/,
 });
 
 export const plus = createToken({
   name: 'plus',
-  pattern: /\+/
+  pattern: /\+/,
 });
 
 export default [

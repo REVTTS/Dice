@@ -1,22 +1,22 @@
 import { createToken } from "chevrotain";
 
 export const integer = createToken({
-  name: 'digit',
-  pattern: /\d/
+  name: 'integer',
+  pattern: /\d/,
 });
 
-export const string = createToken({
+export const character = createToken({
   name: 'character',
-  pattern: /[a-zA-Z]/
+  pattern: /[a-zA-Z]/,
 });
 
 export const whitespace = createToken({
   name: 'whitespace',
-  pattern: /\S/
+  pattern: /\S/,
 });
 
 export default [
+  character,
   integer,
-  string,
   whitespace,
 ];
