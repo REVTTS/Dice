@@ -1,22 +1,30 @@
 import { CstParser } from 'chevrotain';
-import { tokens } from './tokens';
+import tokens from './tokens';
 
 export class Parser extends CstParser {
   constructor(tokens) {
     super(tokens);
 
-    this.RULE('die_statement', () => {
-      this.SUBRULE(this.integer_statement);
-      this.CONSUME(tokens.digit);
-      this.SUBRULE(this.integer_statement);
+    this.RULE('expression', () => {
+      this.SUBRULE(this.die_expression);
+    })
+
+    this.RULE('die_expression', () => {
+      this.SUBRULE(this.integer, { LABEL: "num die" });
+      this.CONSUME(tokens.d);
+      this.SUBRULE2(this.integer, { LABEL: "die size" });
     });
 
-    this.RULE('integer_statement', () => {
+    this.RULE('integer', () => {
       this.MANY(() => {
         this.CONSUME(tokens.digit);
       });
     });
+
+    this.performSelfAnalysis()
   }
 }
 
-export default new Parser(tokens);
+export const getParser = () => new Parser(tokens);
+
+export default getParser();

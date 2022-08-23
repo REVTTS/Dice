@@ -1,6 +1,14 @@
 import { Lexer } from 'chevrotain';
 import tokens from './tokens';
 
-export const Lexer = Lexer;
+const multiModeLexerDefinition = {
+  modes: {
+    dice_mode: [
+      tokens.d,
+      tokens.digit,
+    ],
+  },
+  defaultMode: 'dice_mode',
+}
 
-export default new Lexer(tokens);
+export default new Lexer(multiModeLexerDefinition);
