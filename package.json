@@ -4,5 +4,19 @@
   "main": "index.js",
   "repository": "https://github.com/REVTTS/Dice.git",
   "author": "Ronald Zielaznicki <ronald.m.zielaznicki@gmail.com>",
-  "license": "N/A"
+  "license": "N/A",
+  "scripts": {
+    "build": "webpack --env production",
+    "dev": "webpack --env development --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "chevrotain": "^10.3.0"
+  },
+  "devDependencies": {
+    "mocha": "^10.0.0",
+    "mocha-loader": "^5.1.5",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
+  }
 }
