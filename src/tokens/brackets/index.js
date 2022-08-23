@@ -3,9 +3,9 @@ import curley from './curley';
 import square from './square';
 import round from './round';
 
-export default {
+export default [
   ...angle,
   ...curley,
   ...square,
   ...round,
-}
+];

@@ -1,6 +1,18 @@
-var nodeExternals = require('webpack-node-externals');
+const nodeExternals = require('webpack-node-externals');
+const path = require('path');
 
 module.exports = {
-  target: 'node', // webpack should compile node compatible code
-  externals: [nodeExternals()], // in order to ignore all modules in node_modules folder
+  devtool: "inline-cheap-module-source-map",
+  externals: [nodeExternals()],
+  output: {
+    devtoolModuleFilenameTemplate: '[absolute-resource-path]',
+    devtoolFallbackModuleFilenameTemplate: '[absolute-resource-path]?[hash]'
+  },
+  mode: 'development',
+  resolve: {
+    alias: {
+      'src': path.resolve(__dirname, 'src'),
+    },
+  },
+  target: 'node'
 };

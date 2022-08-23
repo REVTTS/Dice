@@ -12,10 +12,17 @@ export const forward_slash = createToken({
 
 export const minus = createToken({
   name: 'minus',
-  pattern: /-/
+  pattern: /\-/
 });
 
 export const plus = createToken({
   name: 'plus',
-  pattern: /+/
+  pattern: /\+/
 });
+
+export default [
+  asterisk,
+  forward_slash,
+  minus,
+  plus,
+];

@@ -11,6 +11,7 @@
     "test": "mochapack --webpack-config webpack.config.test.js \"src/**/*.test.js\""
   },
   "dependencies": {
+    "assert": "^2.0.0",
     "chevrotain": "^10.3.0"
   },
   "devDependencies": {

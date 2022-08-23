@@ -9,3 +9,8 @@ export const bracket_square_open = createToken({
   name: 'bracket_square_open',
   pattern: /\[/
 });
+
+export default [
+  bracket_square_close,
+  bracket_square_open,
+];
