@@ -15,16 +15,33 @@ export class Interpreter extends BaseSQLVisitor {
   }
 
   die_expression(ctx) {
-    const num_die = this.visit(ctx.num_die);
-    const die_size = this.visit(ctx.die_size);
+    if (ctx.d) {
+      const num_die = this.visit(ctx.left_hand);
+      let die_size = 0;
+      let return_value = 0;
+    
+      ctx.right_hand.forEach((operand) => {
+        die_size += this.visit(operand);
+      });
+    
+      for (let i = 0; i < num_die; i++) {
+        return_value += Math.floor((this.prng() * die_size)) + 1;
+      }
+  
+      return return_value; 
+    } else
+      return this.visit(ctx.left_hand);
+  }
 
-    let value = 0;
+  addition_expression(ctx) {
+    let return_value = this.visit(ctx.left_hand);
 
-    for (let i = 0; i < num_die; i++) {
-      value += Math.floor((this.prng() * die_size)) + 1;
-    }
+    if (ctx.right_hand)
+      ctx.right_hand.forEach((operand) => {
+        return_value += this.visit(operand);
+      });
 
-    return value; 
+    return return_value;
   }
 
   integer_expression(ctx) {

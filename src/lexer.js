@@ -4,7 +4,10 @@ import tokens from './tokens';
 const multiModeLexerDefinition = {
   modes: {
     dice_mode: [
+      tokens.asterisk,
       tokens.d,
+      tokens.forward_slash,
+      tokens.minus,
       tokens.number_zero,
       tokens.number_one,
       tokens.number_two,
@@ -15,6 +18,7 @@ const multiModeLexerDefinition = {
       tokens.number_seven,
       tokens.number_eight,
       tokens.number_nine,
+      tokens.plus,
     ],
   },
   defaultMode: 'dice_mode',

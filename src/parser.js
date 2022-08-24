@@ -6,13 +6,23 @@ export class Parser extends CstParser {
     super(tokens);
 
     this.RULE('expression', () => {
-      this.SUBRULE(this.die_expression);
-    })
+      this.SUBRULE(this.die_expression)
+    });
 
     this.RULE('die_expression', () => {
-      this.SUBRULE(this.integer_expression, { LABEL: "num_die" });
-      this.CONSUME(tokens.d);
-      this.SUBRULE2(this.integer_expression, { LABEL: "die_size" });
+      this.SUBRULE(this.addition_expression, { LABEL: 'left_hand' });
+      this.MANY(() => {
+        this.CONSUME(tokens.d);
+        this.SUBRULE2(this.addition_expression, { LABEL: 'right_hand' });
+      });
+    });
+
+    this.RULE("addition_expression", () => {
+      this.SUBRULE(this.integer_expression, { LABEL: 'left_hand' })
+      this.MANY(() => {
+        this.CONSUME(tokens.plus);
+        this.SUBRULE2(this.integer_expression, { LABEL: 'right_hand' });
+      });
     });
 
     this.RULE('integer_expression', () => {
@@ -20,7 +30,6 @@ export class Parser extends CstParser {
     });
 
     this.RULE('integer', () => {
-
       this.OR([
         { ALT: () => this.SUBRULE(this.integer_zero) },
         { ALT: () => this.SUBRULE(this.integer_one) },
