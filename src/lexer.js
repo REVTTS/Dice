@@ -1,5 +1,5 @@
 import { Lexer } from 'chevrotain';
-import tokens from './tokens';
+import tokens from './tokens/index.js';
 
 const multiModeLexerDefinition = {
   modes: {

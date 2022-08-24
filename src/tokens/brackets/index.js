@@ -1,7 +1,7 @@
-import angle from './angle';
-import curley from './curley';
-import square from './square';
-import round from './round';
+import angle from './angle.js';
+import curley from './curley.js';
+import square from './square.js';
+import round from './round.js';
 
 export default {
   ...angle,

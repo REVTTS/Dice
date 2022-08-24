@@ -1,5 +1,5 @@
 import { CstParser } from 'chevrotain';
-import tokens from './tokens';
+import tokens from './tokens/index.js';
 
 export class Parser extends CstParser {
   constructor(tokens) {

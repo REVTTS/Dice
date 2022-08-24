@@ -1,7 +1,6 @@
-const nodeExternals = require('webpack-node-externals');
-const path = require('path');
+import nodeExternals from 'webpack-node-externals';
 
-module.exports = {
+export default {
   devtool: "inline-cheap-module-source-map",
   externals: [nodeExternals()],
   output: {
@@ -9,10 +8,5 @@ module.exports = {
     devtoolFallbackModuleFilenameTemplate: '[absolute-resource-path]?[hash]'
   },
   mode: 'development',
-  resolve: {
-    alias: {
-      'src': path.resolve(__dirname, 'src'),
-    },
-  },
   target: 'node'
 };

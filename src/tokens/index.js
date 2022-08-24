@@ -1,8 +1,8 @@
-import basic from './basic';
-import brackets from './brackets';
+import basic from './basic.js';
+import brackets from './brackets/index.js';
 import dice from './dice.js';
 import numbers from './numbers.js';
-import operators from './operators';
+import operators from './operators.js';
 
 export default {
   ...basic,

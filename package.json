@@ -5,6 +5,7 @@
   "repository": "https://github.com/REVTTS/Dice.git",
   "author": "Ronald Zielaznicki <ronald.m.zielaznicki@gmail.com>",
   "license": "N/A",
+  "type": "module",
   "scripts": {
     "build": "webpack --env production",
     "dev": "mochapack --webpack-config webpack.config.test.js \"src/**/*.test.js\" --watch",
