@@ -6,21 +6,45 @@ export class Parser extends CstParser {
     super(tokens);
 
     this.RULE('expression', () => {
-      this.SUBRULE(this.die_expression)
+      this.SUBRULE(this.minus_expression)
     });
 
-    this.RULE('die_expression', () => {
-      this.SUBRULE(this.addition_expression, { LABEL: 'left_hand' });
+    this.RULE("minus_expression", () => {
+      this.SUBRULE(this.addition_expression, { LABEL: 'left_hand' })
       this.MANY(() => {
-        this.CONSUME(tokens.d);
+        this.CONSUME(tokens.minus);
         this.SUBRULE2(this.addition_expression, { LABEL: 'right_hand' });
       });
     });
 
     this.RULE("addition_expression", () => {
-      this.SUBRULE(this.integer_expression, { LABEL: 'left_hand' })
+      this.SUBRULE(this.divide_expression, { LABEL: 'left_hand' })
       this.MANY(() => {
         this.CONSUME(tokens.plus);
+        this.SUBRULE2(this.divide_expression, { LABEL: 'right_hand' });
+      });
+    });
+
+    this.RULE("divide_expression", () => {
+      this.SUBRULE(this.multiply_expression, { LABEL: 'left_hand' })
+      this.MANY(() => {
+        this.CONSUME(tokens.forward_slash);
+        this.SUBRULE2(this.multiply_expression, { LABEL: 'right_hand' });
+      });
+    });
+
+    this.RULE("multiply_expression", () => {
+      this.SUBRULE(this.die_expression, { LABEL: 'left_hand' })
+      this.MANY(() => {
+        this.CONSUME(tokens.asterisk);
+        this.SUBRULE2(this.die_expression, { LABEL: 'right_hand' });
+      });
+    });
+
+    this.RULE('die_expression', () => {
+      this.SUBRULE(this.integer_expression, { LABEL: 'left_hand' });
+      this.MANY(() => {
+        this.CONSUME(tokens.d);
         this.SUBRULE2(this.integer_expression, { LABEL: 'right_hand' });
       });
     });

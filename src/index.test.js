@@ -67,5 +67,14 @@ describe('Dice', () => {
       assert.equal(dice.roll(), expected_output);
     });
 
+    it('rolls and adds', () => {
+      const input = '3d5+3';
+      const expected_output = 18;
+
+      const dice = new Dice(input, () => .9999);
+
+      assert.equal(dice.roll(), expected_output);
+    });
+
   });
 });

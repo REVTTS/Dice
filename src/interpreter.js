@@ -11,7 +11,7 @@ export class Interpreter extends BaseSQLVisitor {
   }
 
   expression(ctx) {
-    return this.visit(ctx.die_expression);
+    return this.visit(ctx.minus_expression);
   }
 
   die_expression(ctx) {
@@ -39,6 +39,39 @@ export class Interpreter extends BaseSQLVisitor {
     if (ctx.right_hand)
       ctx.right_hand.forEach((operand) => {
         return_value += this.visit(operand);
+      });
+
+    return return_value;
+  }
+
+  minus_expression(ctx) {
+    let return_value = this.visit(ctx.left_hand);
+
+    if (ctx.right_hand)
+      ctx.right_hand.forEach((operand) => {
+        return_value -= this.visit(operand);
+      });
+
+    return return_value;
+  }
+
+  multiply_expression(ctx) {
+    let return_value = this.visit(ctx.left_hand);
+
+    if (ctx.right_hand)
+      ctx.right_hand.forEach((operand) => {
+        return_value *= this.visit(operand);
+      });
+
+    return return_value;
+  }
+
+  divide_expression(ctx) {
+    let return_value = this.visit(ctx.left_hand);
+
+    if (ctx.right_hand)
+      ctx.right_hand.forEach((operand) => {
+        return_value /= this.visit(operand);
       });
 
     return return_value;
