@@ -15,10 +15,11 @@ export class Dice {
     parser.input = lex_result.tokens
     this.cst = parser.expression();
 
-    if (prng) {
+    if (!!prng) {
       this.interpreter = new Interpreter(prng);
     } else {
-      this.interpreter = new Interpreter(getPRNG());
+      const got_prng = getPRNG()
+      this.interpreter = new Interpreter(got_prng.prng);
     }
   }
 

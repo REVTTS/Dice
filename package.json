@@ -1,6 +1,6 @@
 {
   "name": "@REVTTS/dice",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "src/index.js",
   "repository": "https://github.com/REVTTS/Dice.git",
   "author": "Ronald Zielaznicki <ronald.m.zielaznicki@gmail.com>",
