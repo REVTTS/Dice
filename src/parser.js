@@ -73,7 +73,7 @@ export class Parser extends CstParser {
         { ALT: () => this.SUBRULE(this.parenthesis_expression, { LABEL: 'atomic_expression'}) },
         { ALT: () => this.SUBRULE(this.negative_expression, { LABEL: 'atomic_expression'}) },
         { ALT: () => this.SUBRULE(this.round_expression, { LABEL: 'atomic_expression'}) },
-        { ALT: () => this.SUBRULE(this.whole_number_expression, { LABEL: 'atomic_expression'}) },
+        { ALT: () => this.SUBRULE(this.real_number_expression, { LABEL: 'atomic_expression'}) },
       ])
     });
 
@@ -106,6 +106,14 @@ export class Parser extends CstParser {
       this.CONSUME(tokens.bracket_round_open);
       this.SUBRULE(this.expression, { LABEL: 'inner_expression' });
       this.CONSUME(tokens.bracket_round_close);
+    });
+
+    this.RULE('real_number_expression', () => {
+      this.SUBRULE(this.whole_number_expression, { LABEL: 'left_hand' });
+      this.OPTION(() => {
+        this.CONSUME(tokens.dot);
+        this.SUBRULE2(this.whole_number_expression, { LABEL: 'right_hand' });
+      })
     });
 
     this.RULE('whole_number_expression', () => {

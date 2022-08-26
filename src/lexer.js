@@ -11,6 +11,7 @@ const multiModeLexerDefinition = {
       tokens.exponent,
       tokens.d,
       tokens.divide,
+      tokens.dot,
       tokens.floor,
       tokens.minus,
       tokens.modulus,

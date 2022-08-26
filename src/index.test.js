@@ -150,7 +150,7 @@ describe('Dice', () => {
       assert.equal(dice.roll(input), expected_output);
     });
   
-    it('understands a whole number', () => {
+    it('understands whole numbers', () => {
       const input = '10';
       const expected_output = 10;
   
@@ -162,6 +162,15 @@ describe('Dice', () => {
     it('understands negative integers', () => {
       const input = '-10';
       const expected_output = -10;
+  
+      const dice = new Dice();
+  
+      assert.equal(dice.roll(input), expected_output);
+    });
+  
+    it('understands real numbers', () => {
+      const input = '3.5';
+      const expected_output = 3.5;
   
       const dice = new Dice();
   

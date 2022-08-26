@@ -127,6 +127,18 @@ export class Interpreter extends BaseSQLVisitor {
     return this.visit(ctx.inner_expression);
   }
 
+  real_number_expression(ctx) {
+    const left_hand_value = this.visit(ctx.left_hand);
+
+    if (ctx.dot) {
+      const right_hand_value = this.visit(ctx.right_hand);
+      const num_digits = Math.ceil(Math.log10(right_hand_value+1));
+
+      return left_hand_value + (right_hand_value / 10 * num_digits);
+    }
+    return left_hand_value
+  }
+
   whole_number_expression(ctx) {
     let value = 0;
     for (let whole_number of ctx.whole_number) {

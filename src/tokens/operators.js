@@ -15,6 +15,11 @@ export const divide = createToken({
   pattern: /\//,
 });
 
+export const dot = createToken({
+  name: 'dot',
+  pattern: /\./,
+});
+
 export const exponent = createToken({
   name: 'exponent',
   pattern: /\*\*/,
@@ -54,6 +59,7 @@ export default {
   absolute,
   ceil,
   divide,
+  dot,
   exponent,
   floor,
   minus,
