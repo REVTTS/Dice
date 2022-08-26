@@ -18,9 +18,17 @@ export class Parser extends CstParser {
     });
 
     this.RULE("addition_expression", () => {
-      this.SUBRULE(this.divide_expression, { LABEL: 'left_hand' })
+      this.SUBRULE(this.modulus_expression, { LABEL: 'left_hand' })
       this.MANY(() => {
         this.CONSUME(tokens.plus);
+        this.SUBRULE2(this.modulus_expression, { LABEL: 'right_hand' });
+      });
+    });
+
+    this.RULE("modulus_expression", () => {
+      this.SUBRULE(this.divide_expression, { LABEL: 'left_hand' })
+      this.MANY(() => {
+        this.CONSUME(tokens.modulus);
         this.SUBRULE2(this.divide_expression, { LABEL: 'right_hand' });
       });
     });
@@ -34,9 +42,17 @@ export class Parser extends CstParser {
     });
 
     this.RULE("multiply_expression", () => {
-      this.SUBRULE(this.die_expression, { LABEL: 'left_hand' })
+      this.SUBRULE(this.exponential_expression, { LABEL: 'left_hand' })
       this.MANY(() => {
         this.CONSUME(tokens.asterisk);
+        this.SUBRULE2(this.exponential_expression, { LABEL: 'right_hand' });
+      });
+    });
+
+    this.RULE("exponential_expression", () => {
+      this.SUBRULE(this.die_expression, { LABEL: 'left_hand' });
+      this.MANY(() => {
+        this.CONSUME(tokens.exponent);
         this.SUBRULE2(this.die_expression, { LABEL: 'right_hand' });
       });
     });

@@ -1,6 +1,6 @@
-import nodeExternals from 'webpack-node-externals';
+const nodeExternals = require('webpack-node-externals');
 
-export default {
+module.exports = {
   devtool: "inline-cheap-module-source-map",
   externals: [nodeExternals()],
   output: {

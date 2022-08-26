@@ -4,16 +4,8 @@ import { getParser } from './parser.js';
 import getPRNG from './prng.js';
 
 export class Dice {
-  constructor(input, prng) {
-    const lex_result = lexer.tokenize(input);
-    if (lex_result.errors.length > 0) {
-      const offset = lex_result.errors[0].offset;
-      throw new Error(`Unexpected character "${input.charAt(offset)}" at position: ${offset}`);
-    }
-    const parser = getParser();
-
-    parser.input = lex_result.tokens
-    this.cst = parser.expression();
+  constructor(prng) {
+    this.parser = getParser();
 
     if (!!prng) {
       this.interpreter = new Interpreter(prng);
@@ -23,8 +15,20 @@ export class Dice {
     }
   }
 
-  roll() {
-    return this.interpreter.visit(this.cst);
+  roll(input) {
+    // Tokenize the input with our lexer.
+    const lex_result = lexer.tokenize(input);
+    if (lex_result.errors.length > 0) {
+      const offset = lex_result.errors[0].offset;
+      throw new Error(`Unexpected character "${input.charAt(offset)}" at position: ${offset}`);
+    }
+
+    // Pass our tokens into our parser
+    this.parser.input = lex_result.tokens
+    const cst = this.parser.expression();
+
+    // Interpret the parsed tokens and return the result.
+    return this.interpreter.visit(cst);
   }
 }
 

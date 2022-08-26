@@ -4,6 +4,8 @@ import tokens from './tokens/index.js';
 const multiModeLexerDefinition = {
   modes: {
     dice_mode: [
+      tokens.exponent,
+      tokens.modulus,
       tokens.asterisk,
       tokens.d,
       tokens.forward_slash,
