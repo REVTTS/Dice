@@ -22,7 +22,7 @@ const result = dice.roll('1d20');
 ```
 
 ## Contributing
-This repository follows the standards set in [![Keep a Changelog v1.0.0 badge][https://img.shields.io/badge/changelog-Keep%20a%20Changelog%20v1.1.0-%23E05735]][https://keepachangelog.com/en/1.0.0/]] and ![semver](https://img.shields.io/badge/semver-2.0.0-blue)
+This repository follows the standards set in [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and [semver](https://semver.org/)
 
 ## License
 TBD
