@@ -1,3 +1,5 @@
+// Copyright (C) 2022 REVTTS, Ronald M Zielaznicki
+
 import { CstParser } from 'chevrotain';
 
 import {

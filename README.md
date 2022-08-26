@@ -1,4 +1,5 @@
 # @REVTTS/Dice
+Copyright (C) 2022 REVTTS, Ronald M Zielaznicki
 
 Dice is a package for rolling dice.
 

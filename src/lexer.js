@@ -1,3 +1,5 @@
+// Copyright (C) 2022 REVTTS, Ronald M Zielaznicki
+
 import { Lexer } from 'chevrotain';
 import {
   token_bracket_round_close,

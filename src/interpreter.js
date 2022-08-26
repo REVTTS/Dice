@@ -1,3 +1,5 @@
+// Copyright (C) 2022 REVTTS, Ronald M Zielaznicki
+
 import parser from './parser.js';
 
 const BaseSQLVisitor = parser.getBaseCstVisitorConstructorWithDefaults();

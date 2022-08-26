@@ -1,3 +1,5 @@
+// Copyright (C) 2022 REVTTS, Ronald M Zielaznicki
+
 import lexer from './lexer.js';
 import { Interpreter } from './interpreter.js';
 import { getParser } from './parser.js';
