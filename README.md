@@ -7,8 +7,6 @@ mathematical functions, and variable handling.
 
 ## Installation
 
-Use [yarn](https://yarnpkg.com/) to install @revtts/dice.
-
 ```bash
 yarn install @revtts/dice
 ```
