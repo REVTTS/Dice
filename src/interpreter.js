@@ -127,29 +127,29 @@ export class Interpreter extends BaseSQLVisitor {
     return this.visit(ctx.inner_expression);
   }
 
-  integer_expression(ctx) {
+  whole_number_expression(ctx) {
     let value = 0;
-    for (let integer of ctx.integer) {
-      value = (value * 10) + this.visit(integer);
+    for (let whole_number of ctx.whole_number) {
+      value = (value * 10) + this.visit(whole_number);
     }
     return value;
   }
 
-  integer(ctx) {
+  whole_number(ctx) {
     const key = Object.keys(ctx)[0]
     return this.visit(ctx[key]);
   }
 
-  integer_zero(ctx)  { return 0; }
-  integer_one(ctx)   { return 1; }
-  integer_two(ctx)   { return 2; }
-  integer_three(ctx) { return 3; }
-  integer_four(ctx)  { return 4; }
-  integer_five(ctx)  { return 5; }
-  integer_six(ctx)   { return 6; }
-  integer_seven(ctx) { return 7; }
-  integer_eight(ctx) { return 8; }
-  integer_nine(ctx)  { return 9; }
+  whole_number_zero(ctx)  { return 0; }
+  whole_number_one(ctx)   { return 1; }
+  whole_number_two(ctx)   { return 2; }
+  whole_number_three(ctx) { return 3; }
+  whole_number_four(ctx)  { return 4; }
+  whole_number_five(ctx)  { return 5; }
+  whole_number_six(ctx)   { return 6; }
+  whole_number_seven(ctx) { return 7; }
+  whole_number_eight(ctx) { return 8; }
+  whole_number_nine(ctx)  { return 9; }
 
 }
 

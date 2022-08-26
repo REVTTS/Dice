@@ -73,7 +73,7 @@ export class Parser extends CstParser {
         { ALT: () => this.SUBRULE(this.parenthesis_expression, { LABEL: 'atomic_expression'}) },
         { ALT: () => this.SUBRULE(this.negative_expression, { LABEL: 'atomic_expression'}) },
         { ALT: () => this.SUBRULE(this.round_expression, { LABEL: 'atomic_expression'}) },
-        { ALT: () => this.SUBRULE(this.integer_expression, { LABEL: 'atomic_expression'}) },
+        { ALT: () => this.SUBRULE(this.whole_number_expression, { LABEL: 'atomic_expression'}) },
       ])
     });
 
@@ -108,62 +108,62 @@ export class Parser extends CstParser {
       this.CONSUME(tokens.bracket_round_close);
     });
 
-    this.RULE('integer_expression', () => {
-      this.AT_LEAST_ONE(() => { this.SUBRULE(this.integer) });
+    this.RULE('whole_number_expression', () => {
+      this.AT_LEAST_ONE(() => { this.SUBRULE(this.whole_number) });
     });
 
-    this.RULE('integer', () => {
+    this.RULE('whole_number', () => {
       this.OR([
-        { ALT: () => this.SUBRULE(this.integer_zero) },
-        { ALT: () => this.SUBRULE(this.integer_one) },
-        { ALT: () => this.SUBRULE(this.integer_two) },
-        { ALT: () => this.SUBRULE(this.integer_three) },
-        { ALT: () => this.SUBRULE(this.integer_four) },
-        { ALT: () => this.SUBRULE(this.integer_five) },
-        { ALT: () => this.SUBRULE(this.integer_six) },
-        { ALT: () => this.SUBRULE(this.integer_seven) },
-        { ALT: () => this.SUBRULE(this.integer_eight) },
-        { ALT: () => this.SUBRULE(this.integer_nine) },
+        { ALT: () => this.SUBRULE(this.whole_number_zero) },
+        { ALT: () => this.SUBRULE(this.whole_number_one) },
+        { ALT: () => this.SUBRULE(this.whole_number_two) },
+        { ALT: () => this.SUBRULE(this.whole_number_three) },
+        { ALT: () => this.SUBRULE(this.whole_number_four) },
+        { ALT: () => this.SUBRULE(this.whole_number_five) },
+        { ALT: () => this.SUBRULE(this.whole_number_six) },
+        { ALT: () => this.SUBRULE(this.whole_number_seven) },
+        { ALT: () => this.SUBRULE(this.whole_number_eight) },
+        { ALT: () => this.SUBRULE(this.whole_number_nine) },
       ]);
     });
 
-    this.RULE('integer_zero', () => {
+    this.RULE('whole_number_zero', () => {
       this.CONSUME(tokens.number_zero);
     });
 
-    this.RULE('integer_one', () => {
+    this.RULE('whole_number_one', () => {
       this.CONSUME(tokens.number_one);
     });
 
-    this.RULE('integer_two', () => {
+    this.RULE('whole_number_two', () => {
       this.CONSUME(tokens.number_two);
     });
 
-    this.RULE('integer_three', () => {
+    this.RULE('whole_number_three', () => {
       this.CONSUME(tokens.number_three);
     });
 
-    this.RULE('integer_four', () => {
+    this.RULE('whole_number_four', () => {
       this.CONSUME(tokens.number_four);
     });
 
-    this.RULE('integer_five', () => {
+    this.RULE('whole_number_five', () => {
       this.CONSUME(tokens.number_five);
     });
 
-    this.RULE('integer_six', () => {
+    this.RULE('whole_number_six', () => {
       this.CONSUME(tokens.number_six);
     });
 
-    this.RULE('integer_seven', () => {
+    this.RULE('whole_number_seven', () => {
       this.CONSUME(tokens.number_seven);
     });
 
-    this.RULE('integer_eight', () => {
+    this.RULE('whole_number_eight', () => {
       this.CONSUME(tokens.number_eight);
     });
 
-    this.RULE('integer_nine', () => {
+    this.RULE('whole_number_nine', () => {
       this.CONSUME(tokens.number_nine);
     });
 

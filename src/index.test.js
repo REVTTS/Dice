@@ -150,7 +150,7 @@ describe('Dice', () => {
       assert.equal(dice.roll(input), expected_output);
     });
   
-    it('understands integers', () => {
+    it('understands a whole number', () => {
       const input = '10';
       const expected_output = 10;
   
