@@ -176,5 +176,14 @@ describe('Dice', () => {
   
       assert.equal(dice.roll(input), expected_output);
     });
+  
+    it('skips whitespace', () => {
+      const input = '3 . 5';
+      const expected_output = 3.5;
+  
+      const dice = new Dice();
+  
+      assert.equal(dice.roll(input), expected_output);
+    });
   });
 });

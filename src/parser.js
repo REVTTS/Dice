@@ -1,5 +1,37 @@
 import { CstParser } from 'chevrotain';
-import tokens from './tokens/index.js';
+
+import {
+  token_bracket_round_close,
+  token_bracket_round_open
+} from './tokens/brackets.js';
+
+import {
+  token_operator_absolute,
+  token_operator_ceil,
+  token_operator_dice,
+  token_operator_divide,
+  token_operator_dot,
+  token_operator_exponent,
+  token_operator_floor,
+  token_operator_minus,
+  token_operator_modulus,
+  token_operator_multiply,
+  token_operator_plus,
+  token_operator_round,
+} from './tokens/operators.js';
+
+import {
+  token_number_zero,
+  token_number_one,
+  token_number_two,
+  token_number_three,
+  token_number_four,
+  token_number_five,
+  token_number_six,
+  token_number_seven,
+  token_number_eight,
+  token_number_nine,
+} from './tokens/numbers.js';
 
 export class Parser extends CstParser {
   constructor(tokens) {
@@ -12,7 +44,7 @@ export class Parser extends CstParser {
     this.RULE("minus_expression", () => {
       this.SUBRULE(this.addition_expression, { LABEL: 'left_hand' });
       this.MANY(() => {
-        this.CONSUME(tokens.minus);
+        this.CONSUME(token_operator_minus);
         this.SUBRULE2(this.addition_expression, { LABEL: 'right_hand' });
       });
     });
@@ -20,7 +52,7 @@ export class Parser extends CstParser {
     this.RULE("addition_expression", () => {
       this.SUBRULE(this.modulus_expression, { LABEL: 'left_hand' });
       this.MANY(() => {
-        this.CONSUME(tokens.plus);
+        this.CONSUME(token_operator_plus);
         this.SUBRULE2(this.modulus_expression, { LABEL: 'right_hand' });
       });
     });
@@ -28,7 +60,7 @@ export class Parser extends CstParser {
     this.RULE("modulus_expression", () => {
       this.SUBRULE(this.divide_expression, { LABEL: 'left_hand' });
       this.MANY(() => {
-        this.CONSUME(tokens.modulus);
+        this.CONSUME(token_operator_modulus);
         this.SUBRULE2(this.divide_expression, { LABEL: 'right_hand' });
       });
     });
@@ -36,7 +68,7 @@ export class Parser extends CstParser {
     this.RULE("divide_expression", () => {
       this.SUBRULE(this.multiply_expression, { LABEL: 'left_hand' });
       this.MANY(() => {
-        this.CONSUME(tokens.divide);
+        this.CONSUME(token_operator_divide);
         this.SUBRULE2(this.multiply_expression, { LABEL: 'right_hand' });
       });
     });
@@ -44,7 +76,7 @@ export class Parser extends CstParser {
     this.RULE("multiply_expression", () => {
       this.SUBRULE(this.exponential_expression, { LABEL: 'left_hand' });
       this.MANY(() => {
-        this.CONSUME(tokens.multiply);
+        this.CONSUME(token_operator_multiply);
         this.SUBRULE2(this.exponential_expression, { LABEL: 'right_hand' });
       });
     });
@@ -52,7 +84,7 @@ export class Parser extends CstParser {
     this.RULE("exponential_expression", () => {
       this.SUBRULE(this.die_expression, { LABEL: 'left_hand' });
       this.MANY(() => {
-        this.CONSUME(tokens.exponent);
+        this.CONSUME(token_operator_exponent);
         this.SUBRULE2(this.die_expression, { LABEL: 'right_hand' });
       });
     });
@@ -60,7 +92,7 @@ export class Parser extends CstParser {
     this.RULE('die_expression', () => {
       this.SUBRULE(this.atomic_expression, { LABEL: 'left_hand' });
       this.MANY(() => {
-        this.CONSUME(tokens.d);
+        this.CONSUME(token_operator_dice);
         this.SUBRULE2(this.atomic_expression, { LABEL: 'right_hand' });
       });
     });
@@ -78,40 +110,40 @@ export class Parser extends CstParser {
     });
 
     this.RULE("absolute_expression", () => {
-      this.CONSUME(tokens.absolute);
+      this.CONSUME(token_operator_absolute);
       this.SUBRULE(this.parenthesis_expression, { LABEL: 'inner_expression' });
     });
 
     this.RULE("ceil_expression", () => {
-      this.CONSUME(tokens.ceil);
+      this.CONSUME(token_operator_ceil);
       this.SUBRULE(this.parenthesis_expression, { LABEL: 'inner_expression' });
     });
 
     this.RULE("floor_expression", () => {
-      this.CONSUME(tokens.floor);
+      this.CONSUME(token_operator_floor);
       this.SUBRULE(this.parenthesis_expression, { LABEL: 'inner_expression' });
     });
 
     this.RULE("negative_expression", () => {
-      this.CONSUME(tokens.minus);
+      this.CONSUME(token_operator_minus);
       this.SUBRULE(this.atomic_expression, { LABEL: 'inner_expression' });
     });
 
     this.RULE("round_expression", () => {
-      this.CONSUME(tokens.round);
+      this.CONSUME(token_operator_round);
       this.SUBRULE(this.parenthesis_expression, { LABEL: 'inner_expression' });
     });
 
     this.RULE('parenthesis_expression', () => {
-      this.CONSUME(tokens.bracket_round_open);
+      this.CONSUME(token_bracket_round_open);
       this.SUBRULE(this.expression, { LABEL: 'inner_expression' });
-      this.CONSUME(tokens.bracket_round_close);
+      this.CONSUME(token_bracket_round_close);
     });
 
     this.RULE('real_number_expression', () => {
       this.SUBRULE(this.whole_number_expression, { LABEL: 'left_hand' });
       this.OPTION(() => {
-        this.CONSUME(tokens.dot);
+        this.CONSUME(token_operator_dot);
         this.SUBRULE2(this.whole_number_expression, { LABEL: 'right_hand' });
       })
     });
@@ -136,49 +168,76 @@ export class Parser extends CstParser {
     });
 
     this.RULE('whole_number_zero', () => {
-      this.CONSUME(tokens.number_zero);
+      this.CONSUME(token_number_zero);
     });
 
     this.RULE('whole_number_one', () => {
-      this.CONSUME(tokens.number_one);
+      this.CONSUME(token_number_one);
     });
 
     this.RULE('whole_number_two', () => {
-      this.CONSUME(tokens.number_two);
+      this.CONSUME(token_number_two);
     });
 
     this.RULE('whole_number_three', () => {
-      this.CONSUME(tokens.number_three);
+      this.CONSUME(token_number_three);
     });
 
     this.RULE('whole_number_four', () => {
-      this.CONSUME(tokens.number_four);
+      this.CONSUME(token_number_four);
     });
 
     this.RULE('whole_number_five', () => {
-      this.CONSUME(tokens.number_five);
+      this.CONSUME(token_number_five);
     });
 
     this.RULE('whole_number_six', () => {
-      this.CONSUME(tokens.number_six);
+      this.CONSUME(token_number_six);
     });
 
     this.RULE('whole_number_seven', () => {
-      this.CONSUME(tokens.number_seven);
+      this.CONSUME(token_number_seven);
     });
 
     this.RULE('whole_number_eight', () => {
-      this.CONSUME(tokens.number_eight);
+      this.CONSUME(token_number_eight);
     });
 
     this.RULE('whole_number_nine', () => {
-      this.CONSUME(tokens.number_nine);
+      this.CONSUME(token_number_nine);
     });
 
     this.performSelfAnalysis()
   }
 }
 
-export const getParser = () => new Parser(tokens);
+export const getParser = () => new Parser([
+  token_bracket_round_close,
+  token_bracket_round_open,
+
+  token_operator_absolute,
+  token_operator_ceil,
+  token_operator_dice,
+  token_operator_divide,
+  token_operator_dot,
+  token_operator_exponent,
+  token_operator_floor,
+  token_operator_minus,
+  token_operator_modulus,
+  token_operator_multiply,
+  token_operator_plus,
+  token_operator_round,
+
+  token_number_zero,
+  token_number_one,
+  token_number_two,
+  token_number_three,
+  token_number_four,
+  token_number_five,
+  token_number_six,
+  token_number_seven,
+  token_number_eight,
+  token_number_nine,
+]);
 
 export default getParser();

@@ -1,70 +1,61 @@
 import { createToken } from "chevrotain";
 
-export const absolute = createToken({
+export const token_operator_absolute = createToken({
   name: 'abs',
   pattern: /abs/,
 });
 
-export const ceil = createToken({
+export const token_operator_ceil = createToken({
   name: 'ceil',
   pattern: /ceil/,
 });
 
-export const divide = createToken({
+export const token_operator_dice = createToken({
+  name: 'd',
+  pattern: /[dD]/,
+});
+
+export const token_operator_divide = createToken({
   name: 'divide',
   pattern: /\//,
 });
 
-export const dot = createToken({
+export const token_operator_dot = createToken({
   name: 'dot',
   pattern: /\./,
 });
 
-export const exponent = createToken({
+export const token_operator_exponent = createToken({
   name: 'exponent',
   pattern: /\*\*/,
 });
 
-export const floor = createToken({
+export const token_operator_floor = createToken({
   name: 'floor',
   pattern: /floor/,
 });
 
-export const modulus = createToken({
+export const token_operator_modulus = createToken({
   name: 'modulus',
   pattern: /\%/,
 });
 
-export const minus = createToken({
+export const token_operator_minus = createToken({
   name: 'minus',
   pattern: /\-/,
 });
 
-export const multiply = createToken({
+export const token_operator_multiply = createToken({
   name: 'multiply',
   pattern: /\*/,
 });
 
-export const plus = createToken({
+export const token_operator_plus = createToken({
   name: 'plus',
   pattern: /\+/,
 });
 
-export const round = createToken({
+export const token_operator_round = createToken({
   name: 'round',
   pattern: /round/,
 });
-
-export default {
-  absolute,
-  ceil,
-  divide,
-  dot,
-  exponent,
-  floor,
-  minus,
-  modulus,
-  multiply,
-  plus,
-  round,
-};
