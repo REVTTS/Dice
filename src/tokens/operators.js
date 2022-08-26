@@ -1,5 +1,10 @@
 import { createToken } from "chevrotain";
 
+export const divide = createToken({
+  name: 'divide',
+  pattern: /\//,
+});
+
 export const exponent = createToken({
   name: 'exponent',
   pattern: /\*\*/,
@@ -10,19 +15,14 @@ export const modulus = createToken({
   pattern: /\%/,
 });
 
-export const asterisk = createToken({
-  name: 'asterisk',
-  pattern: /\*/,
-});
-
-export const forward_slash = createToken({
-  name: 'forward_slash',
-  pattern: /\//,
-});
-
 export const minus = createToken({
   name: 'minus',
   pattern: /\-/,
+});
+
+export const multiply = createToken({
+  name: 'multiply',
+  pattern: /\*/,
 });
 
 export const plus = createToken({
@@ -31,10 +31,10 @@ export const plus = createToken({
 });
 
 export default {
-  asterisk,
+  divide,
   exponent,
-  forward_slash,
   minus,
   modulus,
+  multiply,
   plus,
 };

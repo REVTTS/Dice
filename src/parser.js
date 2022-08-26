@@ -36,7 +36,7 @@ export class Parser extends CstParser {
     this.RULE("divide_expression", () => {
       this.SUBRULE(this.multiply_expression, { LABEL: 'left_hand' })
       this.MANY(() => {
-        this.CONSUME(tokens.forward_slash);
+        this.CONSUME(tokens.divide);
         this.SUBRULE2(this.multiply_expression, { LABEL: 'right_hand' });
       });
     });
@@ -44,7 +44,7 @@ export class Parser extends CstParser {
     this.RULE("multiply_expression", () => {
       this.SUBRULE(this.exponential_expression, { LABEL: 'left_hand' })
       this.MANY(() => {
-        this.CONSUME(tokens.asterisk);
+        this.CONSUME(tokens.multiply);
         this.SUBRULE2(this.exponential_expression, { LABEL: 'right_hand' });
       });
     });

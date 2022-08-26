@@ -5,11 +5,11 @@ const multiModeLexerDefinition = {
   modes: {
     dice_mode: [
       tokens.exponent,
-      tokens.modulus,
-      tokens.asterisk,
       tokens.d,
-      tokens.forward_slash,
+      tokens.divide,
       tokens.minus,
+      tokens.modulus,
+      tokens.multiply,
       tokens.number_zero,
       tokens.number_one,
       tokens.number_two,
