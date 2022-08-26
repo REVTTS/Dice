@@ -1,10 +1,10 @@
 {
   "name": "@revtts/dice",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "src/index.js",
   "repository": "https://github.com/REVTTS/Dice.git",
   "author": "Ronald Zielaznicki <ronald.m.zielaznicki@gmail.com>",
-  "license": "N/A",
+  "license": "TBD",
   "scripts": {
     "dev": "mochapack --webpack-config webpack.config.test.js \"src/**/*.test.js\" --watch",
     "test": "mochapack --webpack-config webpack.config.test.js \"src/**/*.test.js\""
