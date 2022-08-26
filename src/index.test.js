@@ -103,10 +103,28 @@ describe('Dice', () => {
       assert.equal(dice.roll(input), expected_output);
     });
 
+    it('ceils a value', () => {
+      const input = 'ceil(10/3)';
+      const expected_output = 4;
+  
+      const dice = new Dice();
+  
+      assert.equal(dice.roll(input), expected_output);
+    });
+  
+    it('absolutes a value', () => {
+      const input = 'abs(10-14)';
+      const expected_output = 4;
+  
+      const dice = new Dice();
+  
+      assert.equal(dice.roll(input), expected_output);
+    });
+
     describe('rounds a value', () => {
       it('rounds up', () => {
-        const input = 'round(.5)';
-        const expected_output = 1;
+        const input = 'round(10/3)';
+        const expected_output = 4;
   
         const dice = new Dice();
   
@@ -121,24 +139,6 @@ describe('Dice', () => {
   
         assert.equal(dice.roll(input), expected_output);
       });
-    });
-
-    it('ceils a value', () => {
-      const input = 'ceil(3.5)';
-      const expected_output = 4;
-  
-      const dice = new Dice();
-  
-      assert.equal(dice.roll(input), expected_output);
-    });
-  
-    it('finds the absoluate value', () => {
-      const input = 'abs(-14)';
-      const expected_output = 14;
-  
-      const dice = new Dice();
-  
-      assert.equal(dice.roll(input), expected_output);
     });
   
     it('respects parenthesis', () => {

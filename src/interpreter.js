@@ -107,6 +107,14 @@ export class Interpreter extends BaseSQLVisitor {
     return Math.floor(this.visit(ctx.inner_expression));
   }
 
+  ceil_expression(ctx) {
+    return Math.ceil(this.visit(ctx.inner_expression));
+  }
+
+  absolute_expression(ctx) {
+    return Math.abs(this.visit(ctx.inner_expression));
+  }
+
   parenthesis_expression(ctx) {
     return this.visit(ctx.inner_expression);
   }

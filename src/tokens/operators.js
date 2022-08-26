@@ -1,5 +1,15 @@
 import { createToken } from "chevrotain";
 
+export const absolute = createToken({
+  name: 'abs',
+  pattern: /abs/,
+});
+
+export const ceil = createToken({
+  name: 'ceil',
+  pattern: /ceil/,
+});
+
 export const divide = createToken({
   name: 'divide',
   pattern: /\//,
@@ -36,6 +46,8 @@ export const plus = createToken({
 });
 
 export default {
+  absolute,
+  ceil,
   divide,
   exponent,
   floor,

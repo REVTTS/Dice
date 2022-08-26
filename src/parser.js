@@ -68,12 +68,24 @@ export class Parser extends CstParser {
     this.RULE("atomic_expression", () => {
       this.OR([
         { ALT: () => this.SUBRULE(this.floor_expression, { LABEL: 'atomic_expression'}) },
+        { ALT: () => this.SUBRULE(this.ceil_expression, { LABEL: 'atomic_expression'}) },
+        { ALT: () => this.SUBRULE(this.absolute_expression, { LABEL: 'atomic_expression'}) },
         { ALT: () => this.SUBRULE(this.integer_expression, { LABEL: 'atomic_expression'}) },
       ])
     });
 
     this.RULE("floor_expression", () => {
       this.CONSUME(tokens.floor);
+      this.SUBRULE(this.parenthesis_expression, { LABEL: 'inner_expression' });
+    });
+
+    this.RULE("ceil_expression", () => {
+      this.CONSUME(tokens.ceil);
+      this.SUBRULE(this.parenthesis_expression, { LABEL: 'inner_expression' });
+    });
+
+    this.RULE("absolute_expression", () => {
+      this.CONSUME(tokens.absolute);
       this.SUBRULE(this.parenthesis_expression, { LABEL: 'inner_expression' });
     });
 
