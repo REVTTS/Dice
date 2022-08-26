@@ -123,7 +123,7 @@ describe('Dice', () => {
 
     describe('rounds a value', () => {
       it('rounds up', () => {
-        const input = 'round(10/3)';
+        const input = 'round(11/3)';
         const expected_output = 4;
   
         const dice = new Dice();
@@ -132,8 +132,8 @@ describe('Dice', () => {
       });
 
       it('rounds down', () => {
-        const input = 'round(.49)';
-        const expected_output = 0;
+        const input = 'round(12/5)';
+        const expected_output = 2;
   
         const dice = new Dice();
   

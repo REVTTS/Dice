@@ -45,6 +45,11 @@ export const plus = createToken({
   pattern: /\+/,
 });
 
+export const round = createToken({
+  name: 'round',
+  pattern: /round/,
+});
+
 export default {
   absolute,
   ceil,
@@ -55,4 +60,5 @@ export default {
   modulus,
   multiply,
   plus,
+  round,
 };

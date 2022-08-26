@@ -26,6 +26,7 @@ const multiModeLexerDefinition = {
       tokens.number_eight,
       tokens.number_nine,
       tokens.plus,
+      tokens.round,
     ],
   },
   defaultMode: 'dice_mode',

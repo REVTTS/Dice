@@ -103,6 +103,10 @@ export class Interpreter extends BaseSQLVisitor {
     return this.visit(ctx.atomic_expression);
   }
 
+  absolute_expression(ctx) {
+    return Math.abs(this.visit(ctx.inner_expression));
+  }
+
   floor_expression(ctx) {
     return Math.floor(this.visit(ctx.inner_expression));
   }
@@ -111,8 +115,8 @@ export class Interpreter extends BaseSQLVisitor {
     return Math.ceil(this.visit(ctx.inner_expression));
   }
 
-  absolute_expression(ctx) {
-    return Math.abs(this.visit(ctx.inner_expression));
+  round_expression(ctx) {
+    return Math.round(this.visit(ctx.inner_expression));
   }
 
   parenthesis_expression(ctx) {
