@@ -1,4 +1,4 @@
-# @REVTTS/Dice [![Version 0.0.1 Badge][version-badge]][/CHANGELOG.md]
+# @REVTTS/Dice
 
 Dice is a package for rolling dice.
 
