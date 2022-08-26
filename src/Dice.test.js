@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import Dice from './index.js';
+import { Dice } from './Dice.js';
 
 describe('Dice given prng: () => 0.1', () => {
   const prng = () => .01;
