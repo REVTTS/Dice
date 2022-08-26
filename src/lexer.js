@@ -4,9 +4,12 @@ import tokens from './tokens/index.js';
 const multiModeLexerDefinition = {
   modes: {
     dice_mode: [
+      tokens.bracket_round_close,
+      tokens.bracket_round_open,
       tokens.exponent,
       tokens.d,
       tokens.divide,
+      tokens.floor,
       tokens.minus,
       tokens.modulus,
       tokens.multiply,

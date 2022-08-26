@@ -6,11 +6,11 @@ export class Parser extends CstParser {
     super(tokens);
 
     this.RULE('expression', () => {
-      this.SUBRULE(this.minus_expression)
+      this.SUBRULE(this.minus_expression);
     });
 
     this.RULE("minus_expression", () => {
-      this.SUBRULE(this.addition_expression, { LABEL: 'left_hand' })
+      this.SUBRULE(this.addition_expression, { LABEL: 'left_hand' });
       this.MANY(() => {
         this.CONSUME(tokens.minus);
         this.SUBRULE2(this.addition_expression, { LABEL: 'right_hand' });
@@ -18,7 +18,7 @@ export class Parser extends CstParser {
     });
 
     this.RULE("addition_expression", () => {
-      this.SUBRULE(this.modulus_expression, { LABEL: 'left_hand' })
+      this.SUBRULE(this.modulus_expression, { LABEL: 'left_hand' });
       this.MANY(() => {
         this.CONSUME(tokens.plus);
         this.SUBRULE2(this.modulus_expression, { LABEL: 'right_hand' });
@@ -26,7 +26,7 @@ export class Parser extends CstParser {
     });
 
     this.RULE("modulus_expression", () => {
-      this.SUBRULE(this.divide_expression, { LABEL: 'left_hand' })
+      this.SUBRULE(this.divide_expression, { LABEL: 'left_hand' });
       this.MANY(() => {
         this.CONSUME(tokens.modulus);
         this.SUBRULE2(this.divide_expression, { LABEL: 'right_hand' });
@@ -34,7 +34,7 @@ export class Parser extends CstParser {
     });
 
     this.RULE("divide_expression", () => {
-      this.SUBRULE(this.multiply_expression, { LABEL: 'left_hand' })
+      this.SUBRULE(this.multiply_expression, { LABEL: 'left_hand' });
       this.MANY(() => {
         this.CONSUME(tokens.divide);
         this.SUBRULE2(this.multiply_expression, { LABEL: 'right_hand' });
@@ -42,7 +42,7 @@ export class Parser extends CstParser {
     });
 
     this.RULE("multiply_expression", () => {
-      this.SUBRULE(this.exponential_expression, { LABEL: 'left_hand' })
+      this.SUBRULE(this.exponential_expression, { LABEL: 'left_hand' });
       this.MANY(() => {
         this.CONSUME(tokens.multiply);
         this.SUBRULE2(this.exponential_expression, { LABEL: 'right_hand' });
@@ -58,11 +58,29 @@ export class Parser extends CstParser {
     });
 
     this.RULE('die_expression', () => {
-      this.SUBRULE(this.integer_expression, { LABEL: 'left_hand' });
+      this.SUBRULE(this.atomic_expression, { LABEL: 'left_hand' });
       this.MANY(() => {
         this.CONSUME(tokens.d);
-        this.SUBRULE2(this.integer_expression, { LABEL: 'right_hand' });
+        this.SUBRULE2(this.atomic_expression, { LABEL: 'right_hand' });
       });
+    });
+
+    this.RULE("atomic_expression", () => {
+      this.OR([
+        { ALT: () => this.SUBRULE(this.floor_expression, { LABEL: 'atomic_expression'}) },
+        { ALT: () => this.SUBRULE(this.integer_expression, { LABEL: 'atomic_expression'}) },
+      ])
+    });
+
+    this.RULE("floor_expression", () => {
+      this.CONSUME(tokens.floor);
+      this.SUBRULE(this.parenthesis_expression, { LABEL: 'inner_expression' });
+    });
+
+    this.RULE('parenthesis_expression', () => {
+      this.CONSUME(tokens.bracket_round_open);
+      this.SUBRULE(this.expression, { LABEL: 'inner_expression' });
+      this.CONSUME(tokens.bracket_round_close);
     });
 
     this.RULE('integer_expression', () => {

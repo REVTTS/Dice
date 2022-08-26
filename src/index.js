@@ -18,6 +18,7 @@ export class Dice {
   roll(input) {
     // Tokenize the input with our lexer.
     const lex_result = lexer.tokenize(input);
+
     if (lex_result.errors.length > 0) {
       const offset = lex_result.errors[0].offset;
       throw new Error(`Unexpected character "${input.charAt(offset)}" at position: ${offset}`);

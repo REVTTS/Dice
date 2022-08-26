@@ -10,6 +10,11 @@ export const exponent = createToken({
   pattern: /\*\*/,
 });
 
+export const floor = createToken({
+  name: 'floor',
+  pattern: /floor/,
+});
+
 export const modulus = createToken({
   name: 'modulus',
   pattern: /\%/,
@@ -33,6 +38,7 @@ export const plus = createToken({
 export default {
   divide,
   exponent,
+  floor,
   minus,
   modulus,
   multiply,

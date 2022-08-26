@@ -95,7 +95,7 @@ describe('Dice', () => {
     });
 
     it('floors a value', () => {
-      const input = 'floor(3.5)';
+      const input = 'floor(10/3)';
       const expected_output = 3;
 
       const dice = new Dice();

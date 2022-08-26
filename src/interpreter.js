@@ -99,6 +99,18 @@ export class Interpreter extends BaseSQLVisitor {
       return this.visit(ctx.left_hand);
   }
 
+  atomic_expression(ctx) {
+    return this.visit(ctx.atomic_expression);
+  }
+
+  floor_expression(ctx) {
+    return Math.floor(this.visit(ctx.inner_expression));
+  }
+
+  parenthesis_expression(ctx) {
+    return this.visit(ctx.inner_expression);
+  }
+
   integer_expression(ctx) {
     let value = 0;
     for (let integer of ctx.integer) {
