@@ -1,6 +1,9 @@
 # @REVTTS/Dice
 
-Dice is a package for rolling dice.
+Dice is a library for rolling dice for Random Encounter Virtual Tabletop Services.
+
+It's goal is to allow users to roll dice, but to also perform mathematical operations,
+mathematical functions, and variable handling.
 
 ## Installation
 
