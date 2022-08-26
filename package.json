@@ -4,7 +4,7 @@
   "main": "src/index.js",
   "repository": "https://github.com/REVTTS/Dice.git",
   "author": "Ronald Zielaznicki <ronald.m.zielaznicki@gmail.com>",
-  "license": "GNU GPLv3",
+  "license": "GPL-3.0-or-later",
   "scripts": {
     "dev": "mochapack --webpack-config webpack.config.test.js \"src/**/*.test.js\" --watch",
     "test": "mochapack --webpack-config webpack.config.test.js \"src/**/*.test.js\""
