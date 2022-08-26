@@ -107,12 +107,16 @@ export class Interpreter extends BaseSQLVisitor {
     return Math.abs(this.visit(ctx.inner_expression));
   }
 
+  ceil_expression(ctx) {
+    return Math.ceil(this.visit(ctx.inner_expression));
+  }
+
   floor_expression(ctx) {
     return Math.floor(this.visit(ctx.inner_expression));
   }
 
-  ceil_expression(ctx) {
-    return Math.ceil(this.visit(ctx.inner_expression));
+  negative_expression(ctx) {
+    return -this.visit(ctx.inner_expression);
   }
 
   round_expression(ctx) {

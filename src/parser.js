@@ -71,6 +71,7 @@ export class Parser extends CstParser {
         { ALT: () => this.SUBRULE(this.ceil_expression, { LABEL: 'atomic_expression'}) },
         { ALT: () => this.SUBRULE(this.floor_expression, { LABEL: 'atomic_expression'}) },
         { ALT: () => this.SUBRULE(this.parenthesis_expression, { LABEL: 'atomic_expression'}) },
+        { ALT: () => this.SUBRULE(this.negative_expression, { LABEL: 'atomic_expression'}) },
         { ALT: () => this.SUBRULE(this.round_expression, { LABEL: 'atomic_expression'}) },
         { ALT: () => this.SUBRULE(this.integer_expression, { LABEL: 'atomic_expression'}) },
       ])
@@ -89,6 +90,11 @@ export class Parser extends CstParser {
     this.RULE("floor_expression", () => {
       this.CONSUME(tokens.floor);
       this.SUBRULE(this.parenthesis_expression, { LABEL: 'inner_expression' });
+    });
+
+    this.RULE("negative_expression", () => {
+      this.CONSUME(tokens.minus);
+      this.SUBRULE(this.atomic_expression, { LABEL: 'inner_expression' });
     });
 
     this.RULE("round_expression", () => {

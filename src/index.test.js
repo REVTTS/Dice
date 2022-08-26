@@ -149,5 +149,23 @@ describe('Dice', () => {
   
       assert.equal(dice.roll(input), expected_output);
     });
+  
+    it('understands integers', () => {
+      const input = '10';
+      const expected_output = 10;
+  
+      const dice = new Dice();
+  
+      assert.equal(dice.roll(input), expected_output);
+    });
+  
+    it('understands negative integers', () => {
+      const input = '-10';
+      const expected_output = -10;
+  
+      const dice = new Dice();
+  
+      assert.equal(dice.roll(input), expected_output);
+    });
   });
 });
