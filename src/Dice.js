@@ -20,7 +20,18 @@ import { Interpreter } from './interpreter.js';
 import { getParser } from './parser.js';
 import getPRNG from './prng.js';
 
+/**
+ * @typedef {Object} RollOutput
+ * @property {String} image - The image of the string input
+ * @property {Number} value - The result of a roll of of the die
+ */
+
 export class Dice {
+  /**
+   * @constructor
+   * @param {function} prng A function that returns a number between 0 and 1
+   *  non-inclusive.
+   * */
   constructor(prng) {
     this.parser = getParser();
 
@@ -31,7 +42,12 @@ export class Dice {
       this.interpreter = new Interpreter(got_prng.prng);
     }
   }
-
+  
+  /**
+   * @function roll
+   * @param {string} input A string representation of a die.
+   * @returns {RollOutput} The result of the die being rolled.
+   * */
   roll(input) {
     // Tokenize the input with our lexer.
     const lex_result = lexer.tokenize(input);
