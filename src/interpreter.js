@@ -27,141 +27,166 @@ export class Interpreter extends BaseSQLVisitor {
     this.validateVisitor()
   }
 
-  expression(ctx) {
-    return this.visit(ctx.minus_expression);
-  }
+  expressions(ctx) {
+    let accumulator = {
+      value: 0,
+    };
 
-  addition_expression(ctx) {
-    let return_value = this.visit(ctx.left_hand);
-
-    if (ctx.right_hand)
-      ctx.right_hand.forEach((operand) => {
-        return_value += this.visit(operand);
-      });
-
-    return return_value;
-  }
-
-  minus_expression(ctx) {
-    let return_value = this.visit(ctx.left_hand);
-
-    if (ctx.right_hand)
-      ctx.right_hand.forEach((operand) => {
-        return_value -= this.visit(operand);
-      });
-
-    return return_value;
-  }
-
-  modulus_expression(ctx) {
-    let return_value = this.visit(ctx.left_hand);
-
-    if (ctx.right_hand)
-      ctx.right_hand.forEach((operand) => {
-        return_value %= this.visit(operand);
-      });
-
-    return return_value;
-  }
-
-  divide_expression(ctx) {
-    let return_value = this.visit(ctx.left_hand);
-
-    if (ctx.right_hand)
-      ctx.right_hand.forEach((operand) => {
-        return_value /= this.visit(operand);
-      });
-
-    return return_value;
-  }
-
-  multiply_expression(ctx) {
-    let return_value = this.visit(ctx.left_hand);
-
-    if (ctx.right_hand)
-      ctx.right_hand.forEach((operand) => {
-        return_value *= this.visit(operand);
-      });
-
-    return return_value;
-  }
-
-  exponential_expression(ctx) {
-    let return_value = this.visit(ctx.left_hand);
-
-    if (ctx.right_hand)
-      ctx.right_hand.forEach((operand) => {
-        return_value **= this.visit(operand);
-      });
-
-    return return_value;
-  }
-
-  die_expression(ctx) {
-    if (ctx.d) {
-      const num_die = this.visit(ctx.left_hand);
-      let die_size = 0;
-      let return_value = 0;
-    
-      ctx.right_hand.forEach((operand) => {
-        die_size += this.visit(operand);
-      });
-    
-      for (let i = 0; i < num_die; i++) {
-        return_value += Math.floor((this.prng() * die_size)) + 1;
+    if (ctx.expressions) {
+      for (let expression of ctx.expressions) {
+        accumulator = this.visit(expression, accumulator);
       }
-  
-      return return_value; 
-    } else
-      return this.visit(ctx.left_hand);
+    
+      return accumulator;
+    }
+    
+    return accumulator;
   }
 
-  atomic_expression(ctx) {
-    return this.visit(ctx.atomic_expression);
+  expression(ctx, accumulator) {
+    return this.visit(ctx.expression, accumulator);
   }
+
+  // Interpreter methods are ordered alphabetically.
 
   absolute_expression(ctx) {
-    return Math.abs(this.visit(ctx.inner_expression));
+    const visit = this.visit(ctx.expression);
+
+    return {
+      value: Math.abs(visit.value),
+    };
+  }
+
+  addition_expression(ctx, accumulator) {
+    const visit = this.visit(ctx.expression);
+
+    if (accumulator) {
+      return {
+        value: accumulator.value + visit.value,
+      }
+    }
+
+    return {
+      value: visit.value,
+    }
   }
 
   ceil_expression(ctx) {
-    return Math.ceil(this.visit(ctx.inner_expression));
+    const visit = this.visit(ctx.expression);
+
+    return {
+      value: Math.ceil(visit.value),
+    };
+  }
+
+  die_expression(ctx, accumulator) {
+    const visit = this.visit(ctx.expression);
+    let value = 0;
+
+    for (let i = 0; i < accumulator.value; i++) {
+      value += Math.floor((this.prng() * visit.value)) + 1;
+    }
+
+    return {
+      value,
+    };
+  }
+
+  divide_expression(ctx, accumulator) {
+    const visit = this.visit(ctx.expression);
+
+    return {
+      value: accumulator.value / visit.value,
+    }
+  }
+
+  exponential_expression(ctx, accumulator) {
+    const visit = this.visit(ctx.expression);
+
+    return {
+      value: accumulator.value ** visit.value,
+    }
   }
 
   floor_expression(ctx) {
-    return Math.floor(this.visit(ctx.inner_expression));
+    const visit = this.visit(ctx.expression);
+
+    return {
+      value: Math.floor(visit.value),
+    };
   }
 
-  negative_expression(ctx) {
-    return -this.visit(ctx.inner_expression);
+  minus_expression(ctx, accumulator) {
+    const visit = this.visit(ctx.expression);
+
+    if (accumulator) {
+      return {
+        value: accumulator.value - visit.value,
+      }
+    }
+
+    return {
+      value: -visit.value,
+    }
   }
 
-  round_expression(ctx) {
-    return Math.round(this.visit(ctx.inner_expression));
+  modulus_expression(ctx, accumulator) {
+    const visit = this.visit(ctx.expression);
+
+    return {
+      value: accumulator.value % visit.value,
+    }
+  }
+
+  multiply_expression(ctx, accumulator) {
+    const visit = this.visit(ctx.expression);
+
+    return {
+      value: accumulator.value * visit.value,
+    }
   }
 
   parenthesis_expression(ctx) {
-    return this.visit(ctx.inner_expression);
+    const visit = this.visit(ctx.expression);
+  
+    return {
+      value: visit.value,
+    }
   }
 
-  real_number_expression(ctx) {
-    const left_hand_value = this.visit(ctx.left_hand);
+  real_number_expression(ctx, accumulator) {
+    const visit = this.visit(ctx.expression);
+    const num_digits = Math.ceil(Math.log10(visit.value+1));
+    const decimal_value = visit.value / 10 * num_digits;
 
-    if (ctx.dot) {
-      const right_hand_value = this.visit(ctx.right_hand);
-      const num_digits = Math.ceil(Math.log10(right_hand_value+1));
-
-      return left_hand_value + (right_hand_value / 10 * num_digits);
+    if (accumulator) {
+      return {
+        value: accumulator.value + decimal_value,
+      }
     }
-    return left_hand_value
+
+    return {
+      value: decimal_value,
+    }
+  }
+
+  round_expression(ctx) {
+    const visit = this.visit(ctx.expression);
+
+    return {
+      value: Math.round(visit.value),
+    };
   }
 
   whole_number_expression(ctx) {
     let value = 0;
     for (let whole_number of ctx.whole_number) {
-      value = (value * 10) + this.visit(whole_number);
+      value = (value * 10) + this.visit(whole_number).value;
     }
-    return value;
+
+    return {
+      value,
+    }
   }
 
   whole_number(ctx) {
@@ -169,16 +194,16 @@ export class Interpreter extends BaseSQLVisitor {
     return this.visit(ctx[key]);
   }
 
-  whole_number_zero(ctx)  { return 0; }
-  whole_number_one(ctx)   { return 1; }
-  whole_number_two(ctx)   { return 2; }
-  whole_number_three(ctx) { return 3; }
-  whole_number_four(ctx)  { return 4; }
-  whole_number_five(ctx)  { return 5; }
-  whole_number_six(ctx)   { return 6; }
-  whole_number_seven(ctx) { return 7; }
-  whole_number_eight(ctx) { return 8; }
-  whole_number_nine(ctx)  { return 9; }
+  whole_number_zero(ctx)  { return { value: 0 }; }
+  whole_number_one(ctx)   { return { value: 1 }; }
+  whole_number_two(ctx)   { return { value: 2 }; }
+  whole_number_three(ctx) { return { value: 3 }; }
+  whole_number_four(ctx)  { return { value: 4 }; }
+  whole_number_five(ctx)  { return { value: 5 }; }
+  whole_number_six(ctx)   { return { value: 6 }; }
+  whole_number_seven(ctx) { return { value: 7 }; }
+  whole_number_eight(ctx) { return { value: 8 }; }
+  whole_number_nine(ctx)  { return { value: 9 }; }
 
 }
 
