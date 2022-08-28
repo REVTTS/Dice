@@ -50,7 +50,7 @@ export class Dice {
    * @param {RollOptions} options How to format the image of the RollOutput.
    * @returns {RollOutput} The result of the die being rolled.
    * */
-  roll(input, { formatter, prng } = { formatter: null, prng: null}) {
+  roll(input, { formatter, prng } = {}) {
     // Tokenize the input with our lexer.
     const lex_result = lexer.tokenize(input);
 
@@ -59,7 +59,7 @@ export class Dice {
       throw new Error(`Unexpected character "${input.charAt(offset)}" at position: ${offset}`);
     }
 
-    // do we have a prng
+    // Do we have a prng? If not, set it to Math.random
     if (!prng)
       prng = Math.random;
 
