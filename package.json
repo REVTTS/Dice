@@ -20,13 +20,17 @@
     "pretest": "yarn lint",
     "test": "mocha 'src/**/*.test.js'"
   },
-  "main": "./dist/Dice.umd.js",
+  "main": "./dist/Dice.mjs",
   "module": "./lib/Dice.mjs",
   "browser": "./dist/Dice.umd.js",
   "exports": {
-    "default": "./dist/Dice.umd.js",
-    "import": "./lib/Dice.mjs",
-    "require": "./dist/Dice.umd.js"
+    ".": {
+      "import": "./lib/Dice.mjs",
+      "require": "./dist/Dice.umd.js"
+    },
+    "./src/": "./src/",
+    "./types/": "./types/",
+    "./package.json": "./package.json"
   },
   "dependencies": {
     "chevrotain": "^10.3.0"
