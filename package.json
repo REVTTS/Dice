@@ -16,6 +16,8 @@
   "scripts": {
     "build": "rollup -c --environment BUILD:production",
     "lint": "eslint src/**",
+    "prepare": "yarn build",
+    "pretest": "yarn lint",
     "test": "mocha 'src/**/*.test.js'"
   },
   "main": "./dist/Dice.umd.js",
