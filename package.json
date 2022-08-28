@@ -5,9 +5,10 @@
   "repository": "https://github.com/REVTTS/Dice.git",
   "author": "Ronald Zielaznicki <>",
   "license": "GPL-3.0-or-later",
+  "type": "module",
   "scripts": {
-    "dev": "mochapack --webpack-config webpack.config.test.js \"src/**/*.test.js\" --watch",
-    "test": "mochapack --webpack-config webpack.config.test.js \"src/**/*.test.js\""
+    "dev": "mochapack --webpack-config webpack.config.test.cjs \"src/**/*.test.js\" --watch",
+    "test": "mochapack --webpack-config webpack.config.test.cjs \"src/**/*.test.js\""
   },
   "dependencies": {
     "chevrotain": "^10.3.0",
