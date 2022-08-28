@@ -113,8 +113,8 @@ describe('Dice', () => {
           const input = '1d10';
           const expected_output = 1;
           
-          const dice = new Dice(prng);
-          const result = dice.roll(input);
+          const dice = new Dice();
+          const result = dice.roll(input, { prng });
     
           assert.equal(result.value, expected_output);
         });
@@ -124,7 +124,7 @@ describe('Dice', () => {
           const expected_output = 2;
           
           const dice = new Dice(prng);
-          const result = dice.roll(input);
+          const result = dice.roll(input, { prng });
     
           assert.equal(result.value, expected_output);
         });
@@ -136,7 +136,7 @@ describe('Dice', () => {
           const expected_output = 10;
           
           const dice = new Dice(prng);
-          const result = dice.roll(input);
+          const result = dice.roll(input, { prng });
     
           assert.equal(result.value, expected_output);
         });
@@ -146,7 +146,7 @@ describe('Dice', () => {
           const expected_output = 6;
           
           const dice = new Dice(prng);
-          const result = dice.roll(input);
+          const result = dice.roll(input, { prng });
     
           assert.equal(result.value, expected_output);
         });

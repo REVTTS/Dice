@@ -18,7 +18,6 @@
 import lexer from './lexer.js';
 import { Interpreter } from './interpreter.js';
 import { getParser } from './parser.js';
-import getPRNG from './prng.js';
 
 /**
  * @typedef {Object} RollOutput The output from a roll
@@ -32,31 +31,26 @@ import getPRNG from './prng.js';
  *  This is unused right now, it's a placeholder for future improvements.
  */
 
-export class Dice {
-  /**
-   * @constructor
-   * @param {function} prng A function that returns a number between 0 and 1
-   *  non-inclusive.
-   * */
-  constructor(prng) {
-    this.parser = getParser();
+/**
+ * @typedef {Object} RollOptions
+ * @property {Formatter?} formatter The object that determines the image of the roll.
+ *  This is unused right now, it's a placeholder for future improvements.
+ * @property {Function?} prng A function that returns a number between 0 and 1
+ *  non-inclusive. Default is Math.random.
+ */
 
-    if (!!prng) {
-      this.interpreter = new Interpreter(prng);
-    } else {
-      const got_prng = getPRNG()
-      this.interpreter = new Interpreter(got_prng.prng);
-    }
+export class Dice {
+  constructor() {
+    this.parser = getParser();
   }
   
   /**
    * @function roll
    * @param {string} input A string representation of a die.
-   * @param {Formatter} formatter How to format the image of the RollOutput.
-   *  unused at the moment.
+   * @param {RollOptions} options How to format the image of the RollOutput.
    * @returns {RollOutput} The result of the die being rolled.
    * */
-  roll(input, formatter) {
+  roll(input, { formatter, prng } = { formatter: null, prng: null}) {
     // Tokenize the input with our lexer.
     const lex_result = lexer.tokenize(input);
 
@@ -65,11 +59,19 @@ export class Dice {
       throw new Error(`Unexpected character "${input.charAt(offset)}" at position: ${offset}`);
     }
 
+    // do we have a prng
+    if (!prng)
+      prng = Math.random;
+
     // Pass our tokens into our parser
     this.parser.input = lex_result.tokens
     const cst = this.parser.expressions();
 
+    // TODO: Set this in the constructor, and pass the prng and formatter
+    // into the expressions so we don't have to create an interpreter here.
+    const interpreter = new Interpreter(prng);
+
     // Interpret the parsed tokens and return the result.
-    return this.interpreter.visit(cst);
+    return interpreter.visit(cst);
   }
 }
