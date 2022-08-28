@@ -57,7 +57,7 @@ export class Parser extends CstParser {
     this.RULE('expressions', () => {
       this.MANY(() => {
         this.SUBRULE(this.expression, { LABEL: 'expressions' });
-      })
+      });
     });
 
     // Ordered by operation. The higher it is, the more precedence.
@@ -92,17 +92,17 @@ export class Parser extends CstParser {
 
     // While the above is ordered by order of operations, the below is
     // ordered alphabetically.
-    this.RULE("absolute_expression", () => {
+    this.RULE('absolute_expression', () => {
       this.CONSUME(token_operator_absolute);
       this.SUBRULE(this.parenthesis_expression, { LABEL: 'expression' });
     });
 
-    this.RULE("addition_expression", () => {
+    this.RULE('addition_expression', () => {
       this.CONSUME(token_operator_plus);
       this.SUBRULE(this.expression, { LABEL: 'expression' });
     });
 
-    this.RULE("ceil_expression", () => {
+    this.RULE('ceil_expression', () => {
       this.CONSUME(token_operator_ceil);
       this.SUBRULE(this.parenthesis_expression, { LABEL: 'expression' });
     });
@@ -112,32 +112,32 @@ export class Parser extends CstParser {
       this.SUBRULE(this.expression, { LABEL: 'expression' });
     });
 
-    this.RULE("divide_expression", () => {
+    this.RULE('divide_expression', () => {
       this.CONSUME(token_operator_divide);
       this.SUBRULE(this.expression, { LABEL: 'expression' });
     });
 
-    this.RULE("exponential_expression", () => {
+    this.RULE('exponential_expression', () => {
       this.CONSUME(token_operator_exponent);
       this.SUBRULE(this.expression, { LABEL: 'expression' });
     });
 
-    this.RULE("floor_expression", () => {
+    this.RULE('floor_expression', () => {
       this.CONSUME(token_operator_floor);
       this.SUBRULE(this.parenthesis_expression, { LABEL: 'expression' });
     });
 
-    this.RULE("minus_expression", () => {
+    this.RULE('minus_expression', () => {
       this.CONSUME(token_operator_minus);
       this.SUBRULE(this.expression, { LABEL: 'expression' });
     });
 
-    this.RULE("modulus_expression", () => {
+    this.RULE('modulus_expression', () => {
       this.CONSUME(token_operator_modulus);
       this.SUBRULE(this.expression, { LABEL: 'expression' });
     });
 
-    this.RULE("multiply_expression", () => {
+    this.RULE('multiply_expression', () => {
       this.CONSUME(token_operator_multiply);
       this.SUBRULE(this.expression, { LABEL: 'expression' });
     });
@@ -153,13 +153,13 @@ export class Parser extends CstParser {
       this.SUBRULE(this.expression, { LABEL: 'expression' });
     });
 
-    this.RULE("round_expression", () => {
+    this.RULE('round_expression', () => {
       this.CONSUME(token_operator_round);
       this.SUBRULE(this.parenthesis_expression, { LABEL: 'expression' });
     });
 
     this.RULE('whole_number_expression', () => {
-      this.AT_LEAST_ONE(() => { this.SUBRULE(this.whole_number) });
+      this.AT_LEAST_ONE(() => { this.SUBRULE(this.whole_number); });
     });
 
     this.RULE('whole_number', () => {
@@ -217,7 +217,7 @@ export class Parser extends CstParser {
       this.CONSUME(token_number_nine);
     });
 
-    this.performSelfAnalysis()
+    this.performSelfAnalysis();
   }
 }
 

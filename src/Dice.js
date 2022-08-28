@@ -50,7 +50,7 @@ export class Dice {
    * @param {RollOptions} options How to format the image of the RollOutput.
    * @returns {RollOutput} The result of the die being rolled.
    * */
-  roll(input, { formatter, prng } = {}) {
+  roll(input, { prng } = {}) {
     // Tokenize the input with our lexer.
     const lex_result = lexer.tokenize(input);
 
@@ -64,7 +64,7 @@ export class Dice {
       prng = Math.random;
 
     // Pass our tokens into our parser
-    this.parser.input = lex_result.tokens
+    this.parser.input = lex_result.tokens;
     const cst = this.parser.expressions();
 
     // TODO: Set this in the constructor, and pass the prng and formatter

@@ -21,10 +21,10 @@ const BaseSQLVisitor = parser.getBaseCstVisitorConstructorWithDefaults();
 
 export class Interpreter extends BaseSQLVisitor {
   constructor(prng) {
-    super()
+    super();
 
     this.prng = prng;
-    this.validateVisitor()
+    this.validateVisitor();
   }
 
   expressions(ctx) {
@@ -63,12 +63,12 @@ export class Interpreter extends BaseSQLVisitor {
     if (accumulator) {
       return {
         value: accumulator.value + visit.value,
-      }
+      };
     }
 
     return {
       value: visit.value,
-    }
+    };
   }
 
   ceil_expression(ctx) {
@@ -97,7 +97,7 @@ export class Interpreter extends BaseSQLVisitor {
 
     return {
       value: accumulator.value / visit.value,
-    }
+    };
   }
 
   exponential_expression(ctx, accumulator) {
@@ -105,7 +105,7 @@ export class Interpreter extends BaseSQLVisitor {
 
     return {
       value: accumulator.value ** visit.value,
-    }
+    };
   }
 
   floor_expression(ctx) {
@@ -122,12 +122,12 @@ export class Interpreter extends BaseSQLVisitor {
     if (accumulator) {
       return {
         value: accumulator.value - visit.value,
-      }
+      };
     }
 
     return {
       value: -visit.value,
-    }
+    };
   }
 
   modulus_expression(ctx, accumulator) {
@@ -135,7 +135,7 @@ export class Interpreter extends BaseSQLVisitor {
 
     return {
       value: accumulator.value % visit.value,
-    }
+    };
   }
 
   multiply_expression(ctx, accumulator) {
@@ -143,7 +143,7 @@ export class Interpreter extends BaseSQLVisitor {
 
     return {
       value: accumulator.value * visit.value,
-    }
+    };
   }
 
   parenthesis_expression(ctx) {
@@ -151,7 +151,7 @@ export class Interpreter extends BaseSQLVisitor {
   
     return {
       value: visit.value,
-    }
+    };
   }
 
   real_number_expression(ctx, accumulator) {
@@ -162,12 +162,12 @@ export class Interpreter extends BaseSQLVisitor {
     if (accumulator) {
       return {
         value: accumulator.value + decimal_value,
-      }
+      };
     }
 
     return {
       value: decimal_value,
-    }
+    };
   }
 
   round_expression(ctx) {
@@ -186,24 +186,24 @@ export class Interpreter extends BaseSQLVisitor {
 
     return {
       value,
-    }
+    };
   }
 
   whole_number(ctx) {
-    const key = Object.keys(ctx)[0]
+    const key = Object.keys(ctx)[0];
     return this.visit(ctx[key]);
   }
 
-  whole_number_zero(ctx)  { return { value: 0 }; }
-  whole_number_one(ctx)   { return { value: 1 }; }
-  whole_number_two(ctx)   { return { value: 2 }; }
-  whole_number_three(ctx) { return { value: 3 }; }
-  whole_number_four(ctx)  { return { value: 4 }; }
-  whole_number_five(ctx)  { return { value: 5 }; }
-  whole_number_six(ctx)   { return { value: 6 }; }
-  whole_number_seven(ctx) { return { value: 7 }; }
-  whole_number_eight(ctx) { return { value: 8 }; }
-  whole_number_nine(ctx)  { return { value: 9 }; }
+  whole_number_zero()  { return { value: 0 }; }
+  whole_number_one()   { return { value: 1 }; }
+  whole_number_two()   { return { value: 2 }; }
+  whole_number_three() { return { value: 3 }; }
+  whole_number_four()  { return { value: 4 }; }
+  whole_number_five()  { return { value: 5 }; }
+  whole_number_six()   { return { value: 6 }; }
+  whole_number_seven() { return { value: 7 }; }
+  whole_number_eight() { return { value: 8 }; }
+  whole_number_nine()  { return { value: 9 }; }
 
 }
 

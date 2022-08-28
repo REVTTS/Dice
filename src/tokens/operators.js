@@ -15,7 +15,7 @@
   If not, see <https://www.gnu.org/licenses/>. 
 */
 
-import { createToken } from "chevrotain";
+import { createToken } from 'chevrotain';
 
 export const token_operator_absolute = createToken({
   name: 'abs',
@@ -54,12 +54,12 @@ export const token_operator_floor = createToken({
 
 export const token_operator_modulus = createToken({
   name: 'modulus',
-  pattern: /\%/,
+  pattern: /%/,
 });
 
 export const token_operator_minus = createToken({
   name: 'minus',
-  pattern: /\-/,
+  pattern: /-/,
 });
 
 export const token_operator_multiply = createToken({

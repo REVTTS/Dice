@@ -15,17 +15,17 @@
   If not, see <https://www.gnu.org/licenses/>. 
 */
 
-import { createToken } from "chevrotain";
+import { createToken } from 'chevrotain';
 
 // Angle Brackets
 export const token_bracket_angle_close = createToken({
   name: 'bracket_angle_close',
-  pattern: /\>/,
+  pattern: />/,
 });
 
 export const token_bracket_angle_open = createToken({
   name: 'bracket_angle_open',
-  pattern: /\</,
+  pattern: /</,
 });
 
 

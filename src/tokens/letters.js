@@ -15,7 +15,7 @@
   If not, see <https://www.gnu.org/licenses/>. 
 */
 
-import { createToken } from "chevrotain";
+import { createToken } from 'chevrotain';
 
 export const token_letter_d = createToken({
   name: 'd',

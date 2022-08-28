@@ -15,6 +15,7 @@
   "types:": "./types/index.d.ts",
   "scripts": {
     "build": "rollup -c --environment BUILD:production",
+    "lint": "eslint src/**",
     "test": "mocha 'src/**/*.test.js'"
   },
   "main": "./dist/Dice.umd.js",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "assert": "^2.0.0",
+    "eslint": "^8.23.0",
     "mocha": "^10.0.0",
     "rollup": "^2.78.1",
     "rollup-plugin-istanbul": "^3.0.0",

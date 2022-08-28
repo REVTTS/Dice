@@ -17,6 +17,8 @@
 
 import assert from 'assert';
 
+import { describe, it } from 'mocha';
+
 import { Dice } from './Dice.js';
 
 describe('Dice', () => {
@@ -163,7 +165,7 @@ describe('Dice', () => {
           const result = dice.roll(input);
     
           assert.equal(result.value, expected_output);
-        })
+        });
       });
     
       describe('negative integers', () => {
@@ -282,7 +284,7 @@ describe('Dice', () => {
         const result = dice.roll(input);
   
         assert.equal(result.value, expected_output);
-      })
+      });
     });
   });
 });

@@ -85,6 +85,6 @@ const multiModeLexerDefinition = {
     ],
   },
   defaultMode: 'dice_mode',
-}
+};
 
 export default new Lexer(multiModeLexerDefinition);

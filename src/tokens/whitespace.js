@@ -15,7 +15,7 @@
   If not, see <https://www.gnu.org/licenses/>. 
 */
 
-import { createToken, Lexer } from "chevrotain";
+import { createToken, Lexer } from 'chevrotain';
 
 export const token_whitespace = createToken({
   name: 'whitespace',
@@ -26,4 +26,4 @@ export const token_whitespace_skip = createToken({
   group: Lexer.SKIPPED,
   name: 'whitespace',
   pattern: /\s/
-})
+});
