@@ -1,19 +1,39 @@
 {
   "name": "@revtts/dice",
   "version": "0.0.2",
-  "main": "src/index.js",
   "repository": "https://github.com/REVTTS/Dice.git",
   "author": "Ronald Zielaznicki <>",
   "license": "GPL-3.0-or-later",
   "type": "module",
+  "keywords": [
+    "dice",
+    "revtts",
+    "roleplay",
+    "role",
+    "rpg"
+  ],
+  "types:": "./src/index.d.ts",
   "scripts": {
+    "build": "rollup -c --environment BUILD:production",
+    "types": "tsc --allowJs -d --emitDeclarationOnly **/*.js",
     "test": "mocha 'src/**/*.test.js'"
+  },
+  "main": "./dist/Dice.umd.js",
+  "module": "./lib/Dice.mjs",
+  "browser": "./dist/Dice.umd.js",
+  "exports": {
+    "default": "./dist/Dice.umd.js",
+    "import": "./lib/Dice.mjs",
+    "require": "./dist/Dice.umd.js"
   },
   "dependencies": {
     "chevrotain": "^10.3.0"
   },
   "devDependencies": {
     "assert": "^2.0.0",
-    "mocha": "^10.0.0"
+    "mocha": "^10.0.0",
+    "rollup": "^2.78.1",
+    "rollup-plugin-istanbul": "^3.0.0",
+    "typescript": "^4.8.2"
   }
 }
