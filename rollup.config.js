@@ -1,7 +1,12 @@
+import { readFileSync } from 'node:fs';
+
 import istanbul from 'rollup-plugin-istanbul';
+import { terser } from 'rollup-plugin-terser';
 
 let pkg = require('./package.json');
-let externals = Object.keys(pkg.dependencies);
+
+const copyright = '/*!\n' + readFileSync('./COPYRIGHT') + '\n*/';
+const externals = Object.keys(pkg.dependencies);
 
 const globals = Object.assign(
   {},
@@ -12,7 +17,11 @@ const globals = Object.assign(
 
 const plugins = [];
 
-if (process.env.BUILD !== 'production') {
+if (process.env.BUILD == 'production') {
+  plugins.push(terser({
+    keep_classnames: true
+  }));
+} else {
   plugins.push(istanbul({
     exclude: ['src/**/*.test.js', 'node_modules/**/*']
   }));
@@ -23,6 +32,7 @@ export default [
     external: externals,
     input: 'src/index.js',
     output: {
+      banner: copyright,
       file: pkg.browser,
       format: 'umd',
       globals: globals,
@@ -35,6 +45,7 @@ export default [
     external: externals,
     input: 'src/index.js',
     output: {
+      banner: copyright,
       file: pkg.module,
       format: 'esm',
     },
