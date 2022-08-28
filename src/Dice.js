@@ -21,9 +21,15 @@ import { getParser } from './parser.js';
 import getPRNG from './prng.js';
 
 /**
- * @typedef {Object} RollOutput
- * @property {String} image - The image of the string input
- * @property {Number} value - The result of a roll of of the die
+ * @typedef {Object} RollOutput The output from a roll
+ * @property {str|any} image A string if undefined, but defined by the formatter
+ *  if provided. Unused at this time.
+ * @property {Number} value The result of a roll of of the die
+ */
+
+/**
+ * @typedef {Object} Formatter The object that determines the image of the roll.
+ *  This is unused right now, it's a placeholder for future improvements.
  */
 
 export class Dice {
@@ -46,9 +52,11 @@ export class Dice {
   /**
    * @function roll
    * @param {string} input A string representation of a die.
+   * @param {Formatter} formatter How to format the image of the RollOutput.
+   *  unused at the moment.
    * @returns {RollOutput} The result of the die being rolled.
    * */
-  roll(input) {
+  roll(input, formatter) {
     // Tokenize the input with our lexer.
     const lex_result = lexer.tokenize(input);
 
