@@ -48,6 +48,7 @@ export default [
       banner: copyright,
       file: pkg.module,
       format: 'esm',
+      sourcemap: true
     },
     plugins: plugins
   }
