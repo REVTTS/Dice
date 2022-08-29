@@ -70,9 +70,6 @@ const result = dice.roll('floor(2.5)'); // { value: 3 }
   - [ ] Alternative Format
     - `die(1, 20)` - one twenty sided die
     - `die(10, 5)` - ten five sided dice
-  - [ ] Dice that don't start at one
-    - `1d3,12` - a die that rolls a value from 3 to 12 inclusive
-    - `die(1, 3, 12)`
   - [ ] Fate Dice
     - A regular Fate die has 2 `+`, 2 `-` and 2 blanks on it.
     - `2df` - roll two regular fate dice.
@@ -139,18 +136,21 @@ const result = dice.roll('floor(2.5)'); // { value: 3 }
       - [ ] default - 10 per initial die?
         - config?
       - [ ] infinites - block infinite explosions
-  - [ ] Max
-    - `10d20max3`
-    - `max(10d20, 3)`
-  - [ ] Min
-    - `10d20min3`
-    - `min(10d20, 3)`
   - [ ] Keep Highest
     - `10d20kh1`
     - `keep_highest(10d20, 1)`
   - [ ] Keep Lowest
     - `10d20kl1`
     - `keep_lowest(10d20, 1)`
+  - [ ] Labels - Tell us what this die, number, or whatever is.
+    - `5#"Strength"`
+    - `label(5, "Strength")`
+  - [ ] Max
+    - `10d20max3`
+    - `max(10d20, 3)`
+  - [ ] Min
+    - `10d20min3`
+    - `min(10d20, 3)`
   - [ ] Re-roll
     - `1d20r1` - rerolls once, this is a divergence from the popular style.
     - `1d20r` - defaults to rerolling min value of die.
@@ -170,6 +170,16 @@ const result = dice.roll('floor(2.5)'); // { value: 3 }
   - [ ] Target Successes & Failures
     - Needs more evaulation
     - Use with comparisons
+
+
+### [beyond-1.0.0]
+- [ ] Dice
+  - [ ] arbitrary Dice
+    - `1ad5,7,8,10` - a die that results in either a 5, 7, 8, or 10.
+    - `arbitrary_die(1, 5, 7, 8, 10)` - same as above
+  - [ ] Odd Dice
+    - `1od3,12` - a die that rolls a value from 3 to 12 inclusive
+    - `odd_die(1, 3, 12)` - same as above
 
 ## Contributing
 This repository follows the standards set in
