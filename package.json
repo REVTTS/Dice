@@ -16,8 +16,8 @@
   "scripts": {
     "build": "rollup -c --environment BUILD:production",
     "lint": "eslint src/**",
-    "prepare": "yarn build",
-    "pretest": "yarn lint",
+    "postinstall": "husky install",
+    "prepublishOnly": "yarn build",
     "test": "mocha 'src/**/*.test.js'"
   },
   "main": "./dist/Dice.mjs",
@@ -38,6 +38,7 @@
   "devDependencies": {
     "assert": "^2.0.0",
     "eslint": "^8.23.0",
+    "husky": "^8.0.1",
     "mocha": "^10.0.0",
     "rollup": "^2.78.1",
     "rollup-plugin-istanbul": "^3.0.0",
