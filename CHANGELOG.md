@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [`#2`](https://github.com/REVTTS/Dice/issues/2) - a roadmap to the readme
 - [`#2`](https://github.com/REVTTS/Dice/issues/2) - labels to the roadmap
 - [`#2`](https://github.com/REVTTS/Dice/issues/2) - arbitrary dice to the roadmap
+- [`#2`](https://github.com/REVTTS/Dice/issues/2) - conditionals to the roadmap
 
 ### Changed
 - [`#2`](https://github.com/REVTTS/Dice/issues/2) - moved odd dice to after version 1.0.0

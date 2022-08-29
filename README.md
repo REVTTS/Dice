@@ -114,6 +114,10 @@ const result = dice.roll('floor(2.5)'); // { value: 3 }
       - [ ] not equal
         - `10d20!<>5` - explodes when not five
         - `not_equal(explodes(10d20), 5)`
+  - [ ] Conditional expressions
+    - `if 5=5 [expression]`
+    - `if 5=5 [expression] else `[other_expression]`
+    - Possibly case statements?
   - [ ] Critical Failures
     - `1d20cf<3` - Fails on less than 3
     - `less_than(critical_failure(1d20), 3)` - same as above
