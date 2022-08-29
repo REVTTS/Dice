@@ -1,3 +1,53 @@
+## [0.0.5] - 2022-08-28
+
+### Changed
+- exports of package.json to proper distributions
+- main of package.json to `./dist/Dice.mjs`
+
+### Removed
+- `/dist` from .gitignore
+- `/lib` from .gitignore
+
+## [0.0.4] - 2022-08-28
+
+### Added
+- pretest script to package.json
+- prepare script to package.json
+- Linting
+- Rollup builds
+
+### Removed
+- Seedrandom as default prng
+- Webpack builds
+
+## [0.0.2] - 2022-08-27
+
+### Added
+
+#### Number Comprehension
+- Negative numbers `Dice.roll('-1')`
+- Real numbers `Dice.roll('0.1')`
+- Whole numbers `Dice.roll('1')`
+
+#### Algebra
+- Addition `Dice.roll('1+1')`
+- Exponents `Dice.roll('5**2')`
+- Division `Dice.roll('10/2')`
+- Modulus `Dice.roll('5%2')`
+- Multiplication `Dice.roll('2*2')`
+- Parenthesis `Dice.roll('4/(3-1)')`
+- Subtraction `Dice.roll('1-1')`
+
+#### Math Functions
+- Absolute `Dice.roll('abs(-4)')`
+- Ceiling `Dice.roll('ceil(2.5)')`
+- Floor `Dice.roll('floor(2.5)')`
+- Round `Dice.roll('round(2.5)')`
+
+#### Dice
+- Basic die `Dice.roll('1d10')`
+
+## Copyright
 Copyright (C) 2022 REVTTS, Ronald M Zielaznicki
 
 This file is part of REVTTS Dice.
