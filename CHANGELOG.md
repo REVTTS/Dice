@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [unreleased]
 ### Changed
 - [`#5`](https://github.com/REVTTS/Dice/issues/5) - prepare for dot expressions
+- add dot notation to modifiers and functions in readme roadmap 
 
 ## [0.0.7] - 2022-08-30
 ### Changed

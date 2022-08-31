@@ -88,55 +88,55 @@ const result = dice.roll('floor(2.5)'); // { value: 3 }
   - [ ] Comparison
       - [ ] equal to
         - `5=5` => `True`
-        - `equal(5, 5)` => `True`
+        - `5.is_equal(5)` => `True`
         - `4=5` => `False`
       - [ ] greater than
         - `6>5` => `True`
-        - `greater_than(6, 5)` => `True`
+        - `6.is_greater_than(5)` => `True`
         - `4>5` => `False`
       - [ ] less than
         - `5<6` => `True`
-        - `less_than(5, 6)` => `True`
+        - `5.is_less_than(6)` => `True`
         - `4>5` => `False`
       - [ ] not equal
         - `3<>5` => `True`
-        - `not_equal(3, 5)` => `True`
+        - `3.is_not_equal(5)` => `True`
         - `5<>5` => `False`
     - Context based:
       - For instance, will act differently on exploding or rerolled dice.
       - [ ] equal to
         - `10d20!=5` - explodes on five
-        - `equal(explodes(10d20), 5)`
+        - `10d20.explodes.equal(5)`
       - [ ] greater than
         - `10d20!>5` - explodes when greater than five
-        - `greater_than(explodes(10d20), 5)`
+        - `10d20.explodes.greater_than(5)`
       - [ ] less than
         - `10d20!<5` - explodes when less than five
-        - `less_than(explodes(10d20), 5)`
+        - `10d20.explodes.less_than(,5)`
       - [ ] not equal
         - `10d20!<>5` - explodes when not five
-        - `not_equal(explodes(10d20), 5)`
+        - `10d20.explodes.not_equal(5)`
   - [ ] Conditional expressions
     - `if 5=5 [expression]`
     - `if 5=5 [expression] else `[other_expression]`
     - Possibly case statements?
   - [ ] Critical Failures
     - `1d20cf<3` - Fails on less than 3
-    - `less_than(critical_failure(1d20), 3)` - same as above
+    - `1d20.critical_failure.less_than(3)` - same as above
     - [ ] Context based Comparisons
   - [ ] Critical Success
     - `1d20cs>18` - Crits when greater than 18
-    - `greater_than(critical_success(1d20), 18)` - same as above
+    - `1d20.critical_success.greater_than(18)` - same as above
     - [ ] Context based Comparisons
   - [ ] Drop Highest
     - `10d20dh3` - Drops highest three rolls
-    - `drop_highest(10d20, 3)` 
+    - `10d20.drop_highest(3)` 
   - [ ] Drop Lowest
     - `10d20dl3` - Drops lowest three rolls
-    - `drop_lowest(10d20, 3)` 
+    - `10d20.drop_lowest(3)` 
   - [ ] Explodes
     - `10d20!`
-    - `explodes(10d20)`
+    - `10d20.explodes`
     - [ ] Context based Comparisons
     - [ ] limits
       - [ ] default - 10 per initial die?
@@ -144,23 +144,23 @@ const result = dice.roll('floor(2.5)'); // { value: 3 }
       - [ ] infinites - block infinite explosions
   - [ ] Keep Highest
     - `10d20kh1`
-    - `keep_highest(10d20, 1)`
+    - `10d20.keep_highest(1)`
   - [ ] Keep Lowest
     - `10d20kl1`
-    - `keep_lowest(10d20, 1)`
+    - `10d20.keep_lowest(1)`
   - [ ] Labels - Tell us what this die, number, or whatever is.
     - `5#"Strength"`
-    - `label(5, "Strength")`
+    - `5.label("Strength")`
   - [ ] Max
     - `10d20max3`
-    - `max(10d20, 3)`
+    - `10d20.max(3)`
   - [ ] Min
     - `10d20min3`
-    - `min(10d20, 3)`
+    - `10d20.min(3)`
   - [ ] Re-roll
     - `1d20r1` - rerolls once, this is a divergence from the popular style.
     - `1d20r` - defaults to rerolling min value of die.
-    - `reroll(1d20, 1)`
+    - `1d20.reroll(1)`
     - [ ] Context based Comparisons
     - [ ] limits
       - [ ] default - 10 per initial die?
@@ -169,10 +169,10 @@ const result = dice.roll('floor(2.5)'); // { value: 3 }
   - [ ] Sorting
     - [ ] Ascending
       - `10d20sa`
-      - `sort_ascending(10d20)`
+      - `10d20.sort_ascending`
     - [ ] Descending
       - `10d20sd`
-      - `sort_descending(10d20)`
+      - `10d20.sort_descending`
   - [ ] Target Successes & Failures
     - Needs more evaulation
     - Use with comparisons
