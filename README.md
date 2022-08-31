@@ -9,6 +9,8 @@ mathematical functions, and variable handling.
 
 ```bash
 yarn install @revtts/dice
+
+yarn setup
 ```
 
 ## Usage

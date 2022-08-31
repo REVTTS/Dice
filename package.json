@@ -16,8 +16,8 @@
   "scripts": {
     "build": "rollup -c --environment BUILD:production",
     "lint": "eslint src/**",
-    "postinstall": "husky install",
-    "prepublishOnly": "yarn build",
+    "setup": "husky install",
+    "prepack": "yarn build",
     "test": "mocha 'src/**/*.test.js'"
   },
   "main": "./dist/Dice.mjs",
