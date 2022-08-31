@@ -63,9 +63,10 @@ export class Parser extends CstParser {
     // Ordered by operation. The higher it is, the more precedence.
     this.RULE('expression', () => {
       this.OR([
+        { ALT: () => this.SUBRULE1(this.dot_expression, { LABEL: 'expression'}) },
+
         // Numbers
         { ALT: () => this.SUBRULE(this.whole_number_expression, { LABEL: 'expression'}) },
-        { ALT: () => this.SUBRULE(this.real_number_expression, { LABEL: 'expression'}) },
 
         // Grouping
         { ALT: () => this.SUBRULE(this.parenthesis_expression, { LABEL: 'expression'}) },
@@ -88,6 +89,9 @@ export class Parser extends CstParser {
         { ALT: () => this.SUBRULE(this.addition_expression, { LABEL: 'expression'}) },
         { ALT: () => this.SUBRULE(this.minus_expression, { LABEL: 'expression'}) },
       ]);
+      this.MANY(() => {
+        this.SUBRULE2(this.dot_expression, { LABEL: 'modifiers' });
+      });
     });
 
     // While the above is ordered by order of operations, the below is
@@ -115,6 +119,13 @@ export class Parser extends CstParser {
     this.RULE('divide_expression', () => {
       this.CONSUME(token_operator_divide);
       this.SUBRULE(this.expression, { LABEL: 'expression' });
+    });
+
+    this.RULE('dot_expression', () => {
+      this.CONSUME(token_operator_dot);
+      this.OR([
+        { ALT: () => this.SUBRULE(this.expression, { LABEL: 'expression'}) },
+      ]);
     });
 
     this.RULE('exponential_expression', () => {
@@ -146,11 +157,6 @@ export class Parser extends CstParser {
       this.CONSUME(token_bracket_round_open);
       this.SUBRULE(this.expressions, { LABEL: 'expression' });
       this.CONSUME(token_bracket_round_close);
-    });
-
-    this.RULE('real_number_expression', () => {
-      this.CONSUME(token_operator_dot);
-      this.SUBRULE(this.expression, { LABEL: 'expression' });
     });
 
     this.RULE('round_expression', () => {

@@ -132,7 +132,7 @@ describe('Dice', () => {
         });
       });
   
-      describe.only('roll multiple dice', () => {
+      describe('roll multiple dice', () => {
         it('basic: returns 10 given "10d10"', () => {
           const input = '10d10';
           const expected_output = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
@@ -204,6 +204,50 @@ describe('Dice', () => {
         it('basic: returns .05 given ".05"', () => {
           const input = '.05';
           const expected_output = .05;
+          
+          const dice = new Dice();
+          const result = dice.roll(input);
+    
+          assert.equal(result.values[0], expected_output);
+
+        });
+
+        it('basic: returns .05 given "0.05"', () => {
+          const input = '0.05';
+          const expected_output = .05;
+          
+          const dice = new Dice();
+          const result = dice.roll(input);
+    
+          assert.equal(result.values[0], expected_output);
+
+        });
+
+        it('basic: returns 10.05 given "10.05"', () => {
+          const input = '10.05';
+          const expected_output = 10.05;
+          
+          const dice = new Dice();
+          const result = dice.roll(input);
+    
+          assert.equal(result.values[0], expected_output);
+
+        });
+
+        it('advanced: returns 10 given "200*.05"', () => {
+          const input = '200*.05';
+          const expected_output = 10;
+          
+          const dice = new Dice();
+          const result = dice.roll(input);
+    
+          assert.equal(result.values[0], expected_output);
+
+        });
+
+        it('advanced: returns 10 given "200*0.05"', () => {
+          const input = '200*0.05';
+          const expected_output = 10;
           
           const dice = new Dice();
           const result = dice.roll(input);

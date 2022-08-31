@@ -46,7 +46,13 @@ export class Interpreter extends BaseSQLVisitor {
   }
 
   expression(ctx, accumulator) {
-    return this.visit(ctx.expression, accumulator);
+    const visit = this.visit(ctx.expression, accumulator);
+
+    if (ctx.modifiers)
+      return ctx.modifiers.reduce(
+        (previous_modifier_visit, modifier) => this.visit(modifier, previous_modifier_visit), visit);
+
+    return visit;
   }
 
   // Interpreter methods are ordered alphabetically.
@@ -105,6 +111,23 @@ export class Interpreter extends BaseSQLVisitor {
     };
   }
 
+  dot_expression(ctx, accumulator) {
+    if (ctx.expression) {
+      const visit = this.visit(ctx.expression);
+      const num_digits = visit.values.length;
+      const decimal_value = sum_values(visit.values) / (10 ** num_digits);
+  
+      if (accumulator)
+        return {
+          values: [sum_values(accumulator.values) + decimal_value],
+        };
+  
+      return {
+        values: [decimal_value],
+      };
+    }
+  }
+
   exponential_expression(ctx, accumulator) {
     const visit = this.visit(ctx.expression);
 
@@ -156,22 +179,6 @@ export class Interpreter extends BaseSQLVisitor {
   
     return {
       values: visit.values,
-    };
-  }
-
-  real_number_expression(ctx, accumulator) {
-    const visit = this.visit(ctx.expression);
-    const num_digits = visit.values.length;
-    const decimal_value = sum_values(visit.values) / (10 ** num_digits);
-
-    if (accumulator) {
-      return {
-        values: [sum_values(accumulator.values) + decimal_value],
-      };
-    }
-
-    return {
-      values: [decimal_value],
     };
   }
 
