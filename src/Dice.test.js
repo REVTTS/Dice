@@ -34,7 +34,7 @@ describe('Dice', () => {
           const dice = new Dice();
           const result = dice.roll(input);
     
-          assert.equal(result.value, expected_output);
+          assert.equal(result.values[0], expected_output);
         });
 
         it('complex: returns 6 given "1+2+3"',() => {
@@ -44,7 +44,7 @@ describe('Dice', () => {
           const dice = new Dice();
           const result = dice.roll(input);
     
-          assert.equal(result.value, expected_output);
+          assert.equal(result.values[0], expected_output);
         });
       });
   
@@ -56,7 +56,7 @@ describe('Dice', () => {
           const dice = new Dice();
           const result = dice.roll(input);
     
-          assert.equal(result.value, expected_output);
+          assert.equal(result.values[0], expected_output);
         });
       });
   
@@ -68,7 +68,7 @@ describe('Dice', () => {
           const dice = new Dice();
           const result = dice.roll(input);
     
-          assert.equal(result.value, expected_output);
+          assert.equal(result.values[0], expected_output);
         });
       });
   
@@ -80,7 +80,7 @@ describe('Dice', () => {
           const dice = new Dice();
           const result = dice.roll(input);
     
-          assert.equal(result.value, expected_output);
+          assert.equal(result.values[0], expected_output);
         });
       });
   
@@ -92,7 +92,7 @@ describe('Dice', () => {
           const dice = new Dice();
           const result = dice.roll(input);
     
-          assert.equal(result.value, expected_output);
+          assert.equal(result.values[0], expected_output);
         });
       });
   
@@ -104,7 +104,7 @@ describe('Dice', () => {
           const dice = new Dice();
           const result = dice.roll(input);
     
-          assert.equal(result.value, expected_output);
+          assert.equal(result.values[0], expected_output);
         });
       });
     });
@@ -118,7 +118,7 @@ describe('Dice', () => {
           const dice = new Dice();
           const result = dice.roll(input, { prng });
     
-          assert.equal(result.value, expected_output);
+          assert.equal(result.values[0], expected_output);
         });
   
         it('difference die size: returns 2 given "1d100"', () => {
@@ -128,19 +128,19 @@ describe('Dice', () => {
           const dice = new Dice(prng);
           const result = dice.roll(input, { prng });
     
-          assert.equal(result.value, expected_output);
+          assert.equal(result.values[0], expected_output);
         });
       });
   
-      describe('roll multiple dice', () => {
+      describe.only('roll multiple dice', () => {
         it('basic: returns 10 given "10d10"', () => {
           const input = '10d10';
-          const expected_output = 10;
+          const expected_output = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
           
           const dice = new Dice(prng);
           const result = dice.roll(input, { prng });
     
-          assert.equal(result.value, expected_output);
+          assert.deepEqual(result.values, expected_output);
         });
   
         it('with addition: returns 6 given "3d5+3"', () => {
@@ -150,7 +150,7 @@ describe('Dice', () => {
           const dice = new Dice(prng);
           const result = dice.roll(input, { prng });
     
-          assert.equal(result.value, expected_output);
+          assert.equal(result.values[0], expected_output);
         });
       });
     });
@@ -164,7 +164,7 @@ describe('Dice', () => {
           const dice = new Dice();
           const result = dice.roll(input);
     
-          assert.equal(result.value, expected_output);
+          assert.equal(result.values[0], expected_output);
         });
       });
     
@@ -176,7 +176,7 @@ describe('Dice', () => {
           const dice = new Dice();
           const result = dice.roll(input);
     
-          assert.equal(result.value, expected_output);
+          assert.equal(result.values[0], expected_output);
         });
       });
     
@@ -188,7 +188,7 @@ describe('Dice', () => {
           const dice = new Dice();
           const result = dice.roll(input);
     
-          assert.equal(result.value, expected_output);
+          assert.equal(result.values[0], expected_output);
         });
 
         it('basic: returns .5 given ".5"', () => {
@@ -198,7 +198,18 @@ describe('Dice', () => {
           const dice = new Dice();
           const result = dice.roll(input);
     
-          assert.equal(result.value, expected_output);
+          assert.equal(result.values[0], expected_output);
+        });
+
+        it('basic: returns .05 given ".05"', () => {
+          const input = '.05';
+          const expected_output = .05;
+          
+          const dice = new Dice();
+          const result = dice.roll(input);
+    
+          assert.equal(result.values[0], expected_output);
+
         });
       });
     });
@@ -212,7 +223,7 @@ describe('Dice', () => {
           const dice = new Dice();
           const result = dice.roll(input);
     
-          assert.equal(result.value, expected_output);
+          assert.equal(result.values[0], expected_output);
         });
       });
 
@@ -224,7 +235,7 @@ describe('Dice', () => {
           const dice = new Dice();
           const result = dice.roll(input);
     
-          assert.equal(result.value, expected_output);
+          assert.equal(result.values[0], expected_output);
         });
       });
 
@@ -236,7 +247,7 @@ describe('Dice', () => {
           const dice = new Dice();
           const result = dice.roll(input);
     
-          assert.equal(result.value, expected_output);
+          assert.equal(result.values[0], expected_output);
         });
       });
 
@@ -248,7 +259,7 @@ describe('Dice', () => {
           const dice = new Dice();
           const result = dice.roll(input);
     
-          assert.equal(result.value, expected_output);
+          assert.equal(result.values[0], expected_output);
         });
     
         it('rounds down: returns 3 given "round(10/3)"', () => {
@@ -258,7 +269,7 @@ describe('Dice', () => {
           const dice = new Dice();
           const result = dice.roll(input);
     
-          assert.equal(result.value, expected_output);
+          assert.equal(result.values[0], expected_output);
         });
       });
     });
@@ -271,7 +282,7 @@ describe('Dice', () => {
         const dice = new Dice();
         const result = dice.roll(input);
   
-        assert.equal(result.value, expected_output);
+        assert.equal(result.values[0], expected_output);
       });
     });
 
@@ -283,7 +294,7 @@ describe('Dice', () => {
         const dice = new Dice();
         const result = dice.roll(input);
   
-        assert.equal(result.value, expected_output);
+        assert.equal(result.values[0], expected_output);
       });
     });
   });

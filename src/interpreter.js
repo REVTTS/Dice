@@ -19,6 +19,8 @@ import parser from './parser.js';
 
 const BaseSQLVisitor = parser.getBaseCstVisitorConstructorWithDefaults();
 
+const sum_values = values => values.reduce((accumulator, value) => accumulator + value, 0);
+
 export class Interpreter extends BaseSQLVisitor {
   constructor(prng) {
     super();
@@ -29,7 +31,7 @@ export class Interpreter extends BaseSQLVisitor {
 
   expressions(ctx) {
     let accumulator = {
-      value: 0,
+      values: [],
     };
 
     if (ctx.expressions) {
@@ -53,7 +55,7 @@ export class Interpreter extends BaseSQLVisitor {
     const visit = this.visit(ctx.expression);
 
     return {
-      value: Math.abs(visit.value),
+      values: [Math.abs(sum_values(visit.values))],
     };
   }
 
@@ -62,12 +64,12 @@ export class Interpreter extends BaseSQLVisitor {
 
     if (accumulator) {
       return {
-        value: accumulator.value + visit.value,
+        values: [sum_values(accumulator.values) + sum_values(visit.values)],
       };
     }
 
     return {
-      value: visit.value,
+      values: [sum_values(visit.values)],
     };
   }
 
@@ -75,20 +77,23 @@ export class Interpreter extends BaseSQLVisitor {
     const visit = this.visit(ctx.expression);
 
     return {
-      value: Math.ceil(visit.value),
+      values: [Math.ceil(sum_values(visit.values))],
     };
   }
 
   die_expression(ctx, accumulator) {
     const visit = this.visit(ctx.expression);
-    let value = 0;
+    let values = [];
 
-    for (let i = 0; i < accumulator.value; i++) {
-      value += Math.floor((this.prng() * visit.value)) + 1;
+    const num_die = sum_values(accumulator.values);
+    const die_size = sum_values(visit.values);
+
+    for (let i = 0; i < num_die; i++) {
+      values.push(Math.floor((this.prng() * die_size)) + 1);
     }
 
     return {
-      value,
+      values,
     };
   }
 
@@ -96,7 +101,7 @@ export class Interpreter extends BaseSQLVisitor {
     const visit = this.visit(ctx.expression);
 
     return {
-      value: accumulator.value / visit.value,
+      values: [sum_values(accumulator.values) / sum_values(visit.values)],
     };
   }
 
@@ -104,7 +109,7 @@ export class Interpreter extends BaseSQLVisitor {
     const visit = this.visit(ctx.expression);
 
     return {
-      value: accumulator.value ** visit.value,
+      values: [sum_values(accumulator.values) ** sum_values(visit.values)],
     };
   }
 
@@ -112,7 +117,7 @@ export class Interpreter extends BaseSQLVisitor {
     const visit = this.visit(ctx.expression);
 
     return {
-      value: Math.floor(visit.value),
+      values: [Math.floor(sum_values(visit.values))],
     };
   }
 
@@ -121,12 +126,12 @@ export class Interpreter extends BaseSQLVisitor {
 
     if (accumulator) {
       return {
-        value: accumulator.value - visit.value,
+        values: [sum_values(accumulator.values) - sum_values(visit.values)],
       };
     }
 
     return {
-      value: -visit.value,
+      values: [-sum_values(visit.values)],
     };
   }
 
@@ -134,7 +139,7 @@ export class Interpreter extends BaseSQLVisitor {
     const visit = this.visit(ctx.expression);
 
     return {
-      value: accumulator.value % visit.value,
+      values: [sum_values(accumulator.values) % sum_values(visit.values)],
     };
   }
 
@@ -142,7 +147,7 @@ export class Interpreter extends BaseSQLVisitor {
     const visit = this.visit(ctx.expression);
 
     return {
-      value: accumulator.value * visit.value,
+      values: [sum_values(accumulator.values) * sum_values(visit.values)],
     };
   }
 
@@ -150,23 +155,23 @@ export class Interpreter extends BaseSQLVisitor {
     const visit = this.visit(ctx.expression);
   
     return {
-      value: visit.value,
+      values: visit.values,
     };
   }
 
   real_number_expression(ctx, accumulator) {
     const visit = this.visit(ctx.expression);
-    const num_digits = Math.ceil(Math.log10(visit.value+1));
-    const decimal_value = visit.value / 10 * num_digits;
+    const num_digits = visit.values.length;
+    const decimal_value = sum_values(visit.values) / (10 ** num_digits);
 
     if (accumulator) {
       return {
-        value: accumulator.value + decimal_value,
+        values: [sum_values(accumulator.values) + decimal_value],
       };
     }
 
     return {
-      value: decimal_value,
+      values: [decimal_value],
     };
   }
 
@@ -174,18 +179,22 @@ export class Interpreter extends BaseSQLVisitor {
     const visit = this.visit(ctx.expression);
 
     return {
-      value: Math.round(visit.value),
+      values: [Math.round(sum_values(visit.values))],
     };
   }
 
   whole_number_expression(ctx) {
-    let value = 0;
-    for (let whole_number of ctx.whole_number) {
-      value = (value * 10) + this.visit(whole_number).value;
+    let values = [];
+
+    const length = ctx.whole_number.length;
+
+    for (let i in ctx.whole_number) {
+      const visit = this.visit(ctx.whole_number[i]);
+      values.push(visit.values[0] * (10 ** (length - 1 - i)));
     }
 
     return {
-      value,
+      values,
     };
   }
 
@@ -194,16 +203,16 @@ export class Interpreter extends BaseSQLVisitor {
     return this.visit(ctx[key]);
   }
 
-  whole_number_zero()  { return { value: 0 }; }
-  whole_number_one()   { return { value: 1 }; }
-  whole_number_two()   { return { value: 2 }; }
-  whole_number_three() { return { value: 3 }; }
-  whole_number_four()  { return { value: 4 }; }
-  whole_number_five()  { return { value: 5 }; }
-  whole_number_six()   { return { value: 6 }; }
-  whole_number_seven() { return { value: 7 }; }
-  whole_number_eight() { return { value: 8 }; }
-  whole_number_nine()  { return { value: 9 }; }
+  whole_number_zero()  { return { values: [0] }; }
+  whole_number_one()   { return { values: [1] }; }
+  whole_number_two()   { return { values: [2] }; }
+  whole_number_three() { return { values: [3] }; }
+  whole_number_four()  { return { values: [4] }; }
+  whole_number_five()  { return { values: [5] }; }
+  whole_number_six()   { return { values: [6] }; }
+  whole_number_seven() { return { values: [7] }; }
+  whole_number_eight() { return { values: [8] }; }
+  whole_number_nine()  { return { values: [9] }; }
 
 }
 
