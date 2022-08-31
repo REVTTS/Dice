@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.6] - 2022-08-30
+
 ### Added
 - [`#1`](https://github.com/REVTTS/Dice/issues/1) - a precommit hook
 - [`#2`](https://github.com/REVTTS/Dice/issues/2) - a roadmap to the readme
