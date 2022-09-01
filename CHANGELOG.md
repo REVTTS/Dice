@@ -8,13 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - [`#5`](https://github.com/REVTTS/Dice/issues/5) - prepare for dot expressions
 - add dot notation to modifiers and functions in readme roadmap 
+- Fixed order of operations
+- Fixed dice rolls that have 0 die to roll
+- Fixed dice rolls that are trying to roll a die of size 0.
 
 ## [0.0.7] - 2022-08-30
 ### Changed
 - move away from scripts that affect down-stream consumers of the package.
 
 ## [0.0.6] - 2022-08-30
-
 ### Added
 - [`#1`](https://github.com/REVTTS/Dice/issues/1) - a precommit hook
 - [`#2`](https://github.com/REVTTS/Dice/issues/2) - a roadmap to the readme
@@ -37,7 +39,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `/lib` from .gitignore
 
 ## [0.0.4] - 2022-08-28
-
 ### Added
 - pretest script to package.json
 - prepare script to package.json
@@ -51,7 +52,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.2] - 2022-08-27
 
 ### Added
-
 #### Number Comprehension
 - Negative numbers `Dice.roll('-1')`
 - Real numbers `Dice.roll('0.1')`

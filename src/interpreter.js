@@ -19,7 +19,39 @@ import parser from './parser.js';
 
 const BaseSQLVisitor = parser.getBaseCstVisitorConstructorWithDefaults();
 
-const sum_values = values => values.reduce((accumulator, value) => accumulator + value, 0);
+const do_add_values = values => values.reduce((accumulator, value) => (accumulator + value));
+const do_divide_values = values => values.reduce((accumulator, value) => (accumulator / value));
+const do_exponential_values = values => values.reduce((accumulator, value) => (accumulator ** value));
+const do_minus_values = values => values.reduce((accumulator, value) => (accumulator - value));
+const do_modulus_values = values => values.reduce((accumulator, value) => (accumulator % value));
+const do_multiply_values = values => values.reduce((accumulator, value) => (accumulator * value));
+
+function binary_expression(ctx, operator_function, visit_fn) {
+  let left_hand_visit = visit_fn(ctx.left_hand);
+
+  if (ctx.right_hand) {
+    // Visit each item in the right hand array.
+    const right_hand_visits = ctx.right_hand.map(right_hand => visit_fn(right_hand));
+
+    // We've got an array of an array of values.
+    // So we condense it down to an array of values.
+    const right_hand_values = right_hand_visits.map(visit => do_add_values(visit.values));
+
+    // return our total values together in our own array of values.
+    return {
+      values: [
+        operator_function([
+          do_add_values(left_hand_visit.values),
+          ...right_hand_values
+        ])
+      ],
+    };
+  }
+
+  return {
+    values: left_hand_visit.values,
+  };
+}
 
 export class Interpreter extends BaseSQLVisitor {
   constructor(prng) {
@@ -29,30 +61,8 @@ export class Interpreter extends BaseSQLVisitor {
     this.validateVisitor();
   }
 
-  expressions(ctx) {
-    let accumulator = {
-      values: [],
-    };
-
-    if (ctx.expressions) {
-      for (let expression of ctx.expressions) {
-        accumulator = this.visit(expression, accumulator);
-      }
-    
-      return accumulator;
-    }
-    
-    return accumulator;
-  }
-
-  expression(ctx, accumulator) {
-    const visit = this.visit(ctx.expression, accumulator);
-
-    if (ctx.modifiers)
-      return ctx.modifiers.reduce(
-        (previous_modifier_visit, modifier) => this.visit(modifier, previous_modifier_visit), visit);
-
-    return visit;
+  expression(ctx) {
+    return this.visit(ctx.expression);
   }
 
   // Interpreter methods are ordered alphabetically.
@@ -61,132 +71,127 @@ export class Interpreter extends BaseSQLVisitor {
     const visit = this.visit(ctx.expression);
 
     return {
-      values: [Math.abs(sum_values(visit.values))],
+      values: [Math.abs(do_add_values(visit.values))],
     };
   }
 
-  addition_expression(ctx, accumulator) {
-    const visit = this.visit(ctx.expression);
+  addition_expression(ctx) {
+    return binary_expression(ctx, do_add_values, this.visit.bind(this));
+  }
 
-    if (accumulator) {
-      return {
-        values: [sum_values(accumulator.values) + sum_values(visit.values)],
-      };
-    }
-
-    return {
-      values: [sum_values(visit.values)],
-    };
+  atomic_expression(ctx) {
+    return this.visit(ctx.expression);
   }
 
   ceil_expression(ctx) {
     const visit = this.visit(ctx.expression);
 
     return {
-      values: [Math.ceil(sum_values(visit.values))],
+      values: [Math.ceil(do_add_values(visit.values))],
     };
   }
 
-  die_expression(ctx, accumulator) {
-    const visit = this.visit(ctx.expression);
-    let values = [];
-
-    const num_die = sum_values(accumulator.values);
-    const die_size = sum_values(visit.values);
-
-    for (let i = 0; i < num_die; i++) {
-      values.push(Math.floor((this.prng() * die_size)) + 1);
-    }
-
-    return {
-      values,
-    };
-  }
-
-  divide_expression(ctx, accumulator) {
-    const visit = this.visit(ctx.expression);
-
-    return {
-      values: [sum_values(accumulator.values) / sum_values(visit.values)],
-    };
-  }
-
-  dot_expression(ctx, accumulator) {
-    if (ctx.expression) {
-      const visit = this.visit(ctx.expression);
-      const num_digits = visit.values.length;
-      const decimal_value = sum_values(visit.values) / (10 ** num_digits);
+  die_expression(ctx) {
+    const left_hand_visit = this.visit(ctx.left_hand);
   
-      if (accumulator)
-        return {
-          values: [sum_values(accumulator.values) + decimal_value],
-        };
+    if (ctx.right_hand) {
+      // Visit each item in the right hand array.
+      const right_hand_visits = ctx.right_hand.map(right_hand => this.visit(right_hand));
   
+      // We've got an array of an array of values.
+      // So we condense it down to an array of values.
+      const right_hand_values = right_hand_visits.map(visit => do_add_values(visit.values));
+
+      const values = right_hand_values.reduce((previous_values, die_size) => {
+        const next_values = [];
+        const num_dice = do_add_values(previous_values);
+
+        for (let i = 0; i < num_dice; i++) {
+          next_values.push(Math.floor(this.prng() * die_size + .9999));
+        }
+
+        return next_values;
+      }, left_hand_visit.values);
+
+      if (values.length === 0) {
+        values.push(0);
+      }
+  
+      // return our total values together in our own array of values.
       return {
-        values: [decimal_value],
+        values,
       };
     }
+  
+    return {
+      values: [do_add_values(left_hand_visit.values)],
+    };
   }
 
-  exponential_expression(ctx, accumulator) {
-    const visit = this.visit(ctx.expression);
+  divide_expression(ctx) {
+    return binary_expression(ctx, do_divide_values, this.visit.bind(this));
+  }
 
-    return {
-      values: [sum_values(accumulator.values) ** sum_values(visit.values)],
-    };
+  dot_expression(ctx) {
+    return this.visit(ctx.expression);
+  }
+
+  exponential_expression(ctx) {
+    return binary_expression(ctx, do_exponential_values, this.visit.bind(this));
   }
 
   floor_expression(ctx) {
     const visit = this.visit(ctx.expression);
 
     return {
-      values: [Math.floor(sum_values(visit.values))],
+      values: [Math.floor(do_add_values(visit.values))],
     };
   }
 
-  minus_expression(ctx, accumulator) {
-    const visit = this.visit(ctx.expression);
-
-    if (accumulator) {
-      return {
-        values: [sum_values(accumulator.values) - sum_values(visit.values)],
-      };
-    }
-
-    return {
-      values: [-sum_values(visit.values)],
-    };
+  minus_expression(ctx) {
+    return binary_expression(ctx, do_minus_values, this.visit.bind(this));
   }
 
-  modulus_expression(ctx, accumulator) {
-    const visit = this.visit(ctx.expression);
-
-    return {
-      values: [sum_values(accumulator.values) % sum_values(visit.values)],
-    };
+  modulus_expression(ctx) {
+    return binary_expression(ctx, do_modulus_values, this.visit.bind(this));
   }
 
-  multiply_expression(ctx, accumulator) {
-    const visit = this.visit(ctx.expression);
+  multiply_expression(ctx) {
+    return binary_expression(ctx, do_multiply_values, this.visit.bind(this));
+  }
 
+  negative_number_expression(ctx) {
     return {
-      values: [sum_values(accumulator.values) * sum_values(visit.values)],
+      values: [-do_add_values(this.visit(ctx.expression).values)],
     };
   }
 
   parenthesis_expression(ctx) {
-    const visit = this.visit(ctx.expression);
-  
-    return {
-      values: visit.values,
-    };
+    return this.visit(ctx.expression);
+  }
+
+  real_number_expression(ctx) {
+    if (ctx.right_hand) {
+      const right_hand_visit = this.visit(ctx.right_hand);
+      const num_digits = right_hand_visit.values.length;
+      const decimal_value = do_add_values(right_hand_visit.values) / (10 ** num_digits);
+      if (ctx.left_hand) {
+        return {
+          values: [do_add_values(this.visit(ctx.left_hand).values) + decimal_value],
+        };
+      }
+
+      return {
+        values: [decimal_value],
+      };
+    }
+
+    return this.visit(ctx.left_hand);
   }
 
   round_expression(ctx) {
-    const visit = this.visit(ctx.expression);
-
     return {
-      values: [Math.round(sum_values(visit.values))],
+      values: [Math.round(do_add_values(this.visit(ctx.expression).values))],
     };
   }
 

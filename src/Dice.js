@@ -65,7 +65,7 @@ export class Dice {
 
     // Pass our tokens into our parser
     this.parser.input = lex_result.tokens;
-    const cst = this.parser.expressions();
+    const cst = this.parser.expression();
 
     // TODO: Set this in the constructor, and pass the prng and formatter
     // into the expressions so we don't have to create an interpreter here.

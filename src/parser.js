@@ -54,44 +54,9 @@ export class Parser extends CstParser {
   constructor(tokens) {
     super(tokens);
 
-    this.RULE('expressions', () => {
-      this.MANY(() => {
-        this.SUBRULE(this.expression, { LABEL: 'expressions' });
-      });
-    });
-
     // Ordered by operation. The higher it is, the more precedence.
     this.RULE('expression', () => {
-      this.OR([
-        { ALT: () => this.SUBRULE1(this.dot_expression, { LABEL: 'expression'}) },
-
-        // Numbers
-        { ALT: () => this.SUBRULE(this.whole_number_expression, { LABEL: 'expression'}) },
-
-        // Grouping
-        { ALT: () => this.SUBRULE(this.parenthesis_expression, { LABEL: 'expression'}) },
-
-        // Mathematical Functions
-        { ALT: () => this.SUBRULE(this.absolute_expression, { LABEL: 'expression'}) },
-        { ALT: () => this.SUBRULE(this.ceil_expression, { LABEL: 'expression'}) },
-        { ALT: () => this.SUBRULE(this.floor_expression, { LABEL: 'expression'}) },
-        { ALT: () => this.SUBRULE(this.round_expression, { LABEL: 'expression'}) },
-
-        // Dice
-        { ALT: () => this.SUBRULE(this.die_expression, { LABEL: 'expression'}) },
-
-        // Algebra
-        { ALT: () => this.SUBRULE(this.exponential_expression, { LABEL: 'expression'}) },
-        { ALT: () => this.SUBRULE(this.multiply_expression, { LABEL: 'expression'}) },
-        { ALT: () => this.SUBRULE(this.divide_expression, { LABEL: 'expression'}) },
-        { ALT: () => this.SUBRULE(this.modulus_expression, { LABEL: 'expression'}) },
-
-        { ALT: () => this.SUBRULE(this.addition_expression, { LABEL: 'expression'}) },
-        { ALT: () => this.SUBRULE(this.minus_expression, { LABEL: 'expression'}) },
-      ]);
-      this.MANY(() => {
-        this.SUBRULE2(this.dot_expression, { LABEL: 'modifiers' });
-      });
+      this.SUBRULE(this.minus_expression, { LABEL: 'expression'});
     });
 
     // While the above is ordered by order of operations, the below is
@@ -102,8 +67,25 @@ export class Parser extends CstParser {
     });
 
     this.RULE('addition_expression', () => {
-      this.CONSUME(token_operator_plus);
-      this.SUBRULE(this.expression, { LABEL: 'expression' });
+      this.SUBRULE(this.modulus_expression, { LABEL: 'left_hand' });
+      this.MANY(() => {
+        this.CONSUME(token_operator_plus);
+        this.SUBRULE2(this.modulus_expression, { LABEL: 'right_hand' });
+      });
+    });
+
+    // Atomic might not be the right name here.
+    // Need to do some reading
+    this.RULE('atomic_expression', () => {
+      this.OR([
+        { ALT: () => this.SUBRULE(this.absolute_expression, { LABEL: 'expression' }) },
+        { ALT: () => this.SUBRULE(this.ceil_expression, { LABEL: 'expression' }) },
+        { ALT: () => this.SUBRULE(this.floor_expression, { LABEL: 'expression' }) },
+        { ALT: () => this.SUBRULE(this.negative_number_expression, { LABEL: 'expression' }) },
+        { ALT: () => this.SUBRULE(this.parenthesis_expression, { LABEL: 'expression' }) },
+        { ALT: () => this.SUBRULE(this.round_expression, { LABEL: 'expression' }) },
+        { ALT: () => this.SUBRULE(this.whole_number_expression, { LABEL: 'expression' }) },
+      ]);
     });
 
     this.RULE('ceil_expression', () => {
@@ -112,51 +94,99 @@ export class Parser extends CstParser {
     });
 
     this.RULE('die_expression', () => {
-      this.CONSUME(token_operator_dice);
-      this.SUBRULE(this.expression, { LABEL: 'expression' });
+      this.SUBRULE(this.dot_expression, { LABEL: 'left_hand' });
+      this.MANY(() => {
+        this.CONSUME(token_operator_dice);
+        this.SUBRULE2(this.dot_expression, { LABEL: 'right_hand' });
+      });
     });
 
     this.RULE('divide_expression', () => {
-      this.CONSUME(token_operator_divide);
-      this.SUBRULE(this.expression, { LABEL: 'expression' });
+      this.SUBRULE(this.multiply_expression, { LABEL: 'left_hand' });
+      this.MANY(() => {
+        this.CONSUME(token_operator_divide);
+        this.SUBRULE2(this.multiply_expression, { LABEL: 'right_hand' });
+      });
     });
 
     this.RULE('dot_expression', () => {
-      this.CONSUME(token_operator_dot);
       this.OR([
-        { ALT: () => this.SUBRULE(this.expression, { LABEL: 'expression'}) },
+        { ALT: () => this.SUBRULE(this.real_number_expression, { LABEL: 'expression' }) },
       ]);
     });
 
     this.RULE('exponential_expression', () => {
-      this.CONSUME(token_operator_exponent);
-      this.SUBRULE(this.expression, { LABEL: 'expression' });
+      this.SUBRULE(this.die_expression, { LABEL: 'left_hand' });
+      this.MANY(() => {
+        this.CONSUME(token_operator_exponent);
+        this.SUBRULE2(this.die_expression, { LABEL: 'right_hand' });
+      });
     });
 
     this.RULE('floor_expression', () => {
       this.CONSUME(token_operator_floor);
-      this.SUBRULE(this.parenthesis_expression, { LABEL: 'expression' });
+      this.SUBRULE2(this.parenthesis_expression, { LABEL: 'expression' });
     });
 
     this.RULE('minus_expression', () => {
-      this.CONSUME(token_operator_minus);
-      this.SUBRULE(this.expression, { LABEL: 'expression' });
+      this.SUBRULE(this.addition_expression, { LABEL: 'left_hand'});
+      this.MANY(() => {
+        this.CONSUME(token_operator_minus);
+        this.SUBRULE2(this.addition_expression, { LABEL: 'right_hand' });
+      });
     });
 
     this.RULE('modulus_expression', () => {
-      this.CONSUME(token_operator_modulus);
-      this.SUBRULE(this.expression, { LABEL: 'expression' });
+      this.SUBRULE(this.divide_expression, { LABEL: 'left_hand'});
+      this.MANY(() => {
+        this.CONSUME(token_operator_modulus);
+        this.SUBRULE2(this.divide_expression, { LABEL: 'right_hand' });
+      });
     });
 
     this.RULE('multiply_expression', () => {
-      this.CONSUME(token_operator_multiply);
-      this.SUBRULE(this.expression, { LABEL: 'expression' });
+      this.SUBRULE(this.exponential_expression, { LABEL: 'left_hand' });
+      this.MANY(() => {
+        this.CONSUME(token_operator_multiply);
+        this.SUBRULE2(this.exponential_expression, { LABEL: 'right_hand' });
+      });
+    });
+
+    this.RULE('negative_number_expression', () => {
+      this.CONSUME(token_operator_minus);
+      this.SUBRULE(this.expression);
     });
 
     this.RULE('parenthesis_expression', () => {
       this.CONSUME(token_bracket_round_open);
-      this.SUBRULE(this.expressions, { LABEL: 'expression' });
+      this.SUBRULE(this.expression, { LABEL: 'expression' });
       this.CONSUME(token_bracket_round_close);
+    });
+
+    this.RULE('real_number_expression', () => {
+      this.OR([
+        {
+          ALT: () => {
+            this.SUBRULE(this.atomic_expression, { LABEL: 'left_hand'});
+            // Real number with a leading expression.
+            // ie. "1.05"
+            // Unlike most other expressions, this is not a MANY.
+            // 1.05.05 doesn't make sense afaik.
+            this.OPTION(() => {
+              this.CONSUME(token_operator_dot);
+              this.SUBRULE2(this.atomic_expression, { LABEL: 'right_hand'});
+            });
+          }
+        },
+        // Real number without a leading expression.
+        // ie. ".05"
+        {
+          ALT: () => {
+            this.CONSUME2(token_operator_dot);
+            this.SUBRULE3(this.atomic_expression, { LABEL: 'right_hand'});
+          }
+        },
+      ]);
     });
 
     this.RULE('round_expression', () => {
