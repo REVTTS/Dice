@@ -74,7 +74,7 @@ export class Dice {
     variables.forEach((key_value) => {
       // TODO: Assert key is a string.
       // TODO: Assert key follows the correct format.
-      variable_map.set(key_value[0].to_lower_case(), key_value[1]);
+      variable_map.set(key_value[0].toLowerCase(), key_value[1]);
     });
 
     // Pass our tokens into our parser

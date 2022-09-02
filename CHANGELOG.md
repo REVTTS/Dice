@@ -5,14 +5,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [unreleased]
+### Added
+- added dot notation to modifiers and functions in readme roadmap 
+- added variable expressions
+
 ### Changed
 - [`#5`](https://github.com/REVTTS/Dice/issues/5) - prepare for dot expressions
-- add dot notation to modifiers and functions in readme roadmap 
 - fixed order of operations
 - fixed dice rolls that have 0 die to roll
 - fixed dice rolls that are trying to roll a die of size 0
 - moved interpretor into Dice constructor
-- moved prng pass to visit instead of interpretor constructor
+- moved prng parameter to visit() instead of interpretor constructor
 
 ## [0.0.7] - 2022-08-30
 ### Changed

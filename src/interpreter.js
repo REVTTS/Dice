@@ -191,13 +191,13 @@ export class Interpreter extends BaseSQLVisitor {
     };
   }
 
-  whole_number_expression(ctx, options) {
+  whole_number_expression(ctx) {
     let values = [];
 
     const length = ctx.whole_number.length;
 
     for (let i in ctx.whole_number) {
-      values.push(this.visit(ctx.whole_number[i], options) * (10 ** (length - 1 - i)));
+      values.push(this.visit(ctx.whole_number[i]) * (10 ** (length - 1 - i)));
     }
 
     return {
@@ -220,6 +220,12 @@ export class Interpreter extends BaseSQLVisitor {
   whole_number_seven() { return 7; }
   whole_number_eight() { return 8; }
   whole_number_nine()  { return 9; }
+
+  variable_expression(ctx, options) {
+    return {
+      values: [options.variables.get(ctx.string[0].image) || 0],
+    };
+  }
 
 }
 

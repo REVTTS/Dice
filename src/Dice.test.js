@@ -410,7 +410,6 @@ describe('whitespace', () => {
 
 describe('variables', () => {
   it('translates a variable', () => {
-    /*
     const variables = [
       ['strength', 5]
     ];
@@ -421,6 +420,32 @@ describe('variables', () => {
     const result = dice.roll(input, { variables });
 
     assert.equal(result.values[0], expected_output);
-    */
+  });
+
+  it('adds variables together', () => {
+    const variables = [
+      ['strength', 5],
+      ['bar', 5]
+    ];
+    const input = '{strength}+{bar}';
+    const expected_output = 10;
+      
+    const dice = new Dice();
+    const result = dice.roll(input, { variables });
+
+    assert.equal(result.values[0], expected_output);
+  });
+
+  it('adds variables with whole numbers', () => {
+    const variables = [
+      ['strength', 5]
+    ];
+    const input = '{strength}+3';
+    const expected_output = 8;
+      
+    const dice = new Dice();
+    const result = dice.roll(input, { variables });
+
+    assert.equal(result.values[0], expected_output);
   });
 });

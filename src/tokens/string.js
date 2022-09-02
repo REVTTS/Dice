@@ -17,7 +17,7 @@
 
 import { createToken } from 'chevrotain';
 
-export const token_letter_d = createToken({
-  name: 'd',
-  pattern: /[dD]/,
+export const token_string = createToken({
+  name: 'string',
+  pattern: /[a-zA-Z]+/,
 });
