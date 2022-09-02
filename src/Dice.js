@@ -37,10 +37,13 @@ import { getParser } from './parser.js';
  *  This is unused right now, it's a placeholder for future improvements.
  * @property {Function?} prng A function that returns a number between 0 and 1
  *  non-inclusive. Default is Math.random.
+ * @property {Iterable<Iterable>?} variables Values utilized to translate die variable references
+ *  into their appropriate values. ex. [ ['strength', 10], ['dexterity', 12] ]
  */
 
 export class Dice {
   constructor() {
+    this.interpreter = new Interpreter();
     this.parser = getParser();
   }
   
@@ -50,7 +53,7 @@ export class Dice {
    * @param {RollOptions} options How to format the image of the RollOutput.
    * @returns {RollOutput} The result of the die being rolled.
    * */
-  roll(input, { prng } = {}) {
+  roll(input, { prng, variables } = {}) {
     // Tokenize the input with our lexer.
     const lex_result = lexer.tokenize(input);
 
@@ -63,15 +66,25 @@ export class Dice {
     if (!prng)
       prng = Math.random;
 
+    // If we don't have variables, start with an empty array
+    if (!variables)
+      variables = [];
+
+    const variable_map = new Map();
+    variables.forEach((key_value) => {
+      // TODO: Assert key is a string.
+      // TODO: Assert key follows the correct format.
+      variable_map.set(key_value[0].to_lower_case(), key_value[1]);
+    });
+
     // Pass our tokens into our parser
     this.parser.input = lex_result.tokens;
     const cst = this.parser.expression();
 
-    // TODO: Set this in the constructor, and pass the prng and formatter
-    // into the expressions so we don't have to create an interpreter here.
-    const interpreter = new Interpreter(prng);
-
     // Interpret the parsed tokens and return the result.
-    return interpreter.visit(cst);
+    return this.interpreter.visit(cst, {
+      prng,
+      variables: variable_map
+    });
   }
 }

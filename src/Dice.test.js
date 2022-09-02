@@ -108,88 +108,104 @@ describe('algebra', () => {
 describe('die', () => {
   const prng = () => .01;
 
-  describe('single die', () => {
-    it('basic: returns 1 given "1d10"', () => {
-      const input = '1d10';
-      const expected_output = 1;
-      
-      const dice = new Dice();
-      const result = dice.roll(input, { prng });
+  it('basic: returns 1 given "1d10"', () => {
+    const input = '1d10';
+    const expected_output = 1;
+    
+    const dice = new Dice();
+    const result = dice.roll(input, { prng });
 
-      assert.equal(result.values[0], expected_output);
-    });
-
-    it('difference die size: returns 1 given "1d100"', () => {
-      const input = '1d100';
-      const expected_output = 1;
-      
-      const dice = new Dice(prng);
-      const result = dice.roll(input, { prng });
-
-      assert.equal(result.values[0], expected_output);
-    });
+    assert.equal(result.values[0], expected_output);
   });
 
-  describe('roll multiple dice', () => {
-    it('basic: returns 10 given "10d10"', () => {
-      const input = '10d10';
-      const expected_output = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-      
-      const dice = new Dice(prng);
-      const result = dice.roll(input, { prng });
+  it('difference die size: returns 1 given "1d100"', () => {
+    const input = '1d100';
+    const expected_output = 1;
+    
+    const dice = new Dice(prng);
+    const result = dice.roll(input, { prng });
 
-      assert.deepEqual(result.values, expected_output);
-    });
+    assert.equal(result.values[0], expected_output);
+  });
 
-    it('returns 1 given "1d1"', () => {
-      const input = '1d1';
-      const expected_output = 1;
-      
-      const dice = new Dice(prng);
-      const result = dice.roll(input, { prng });
+  it('returns 1 given "1d1"', () => {
+    const input = '1d1';
+    const expected_output = 1;
+    
+    const dice = new Dice(prng);
+    const result = dice.roll(input, { prng });
 
-      assert.equal(result.values[0], expected_output);
-    });
+    assert.equal(result.values[0], expected_output);
+  });
 
-    it('returns 0 given "0d1"', () => {
-      const input = '0d1';
-      const expected_output = 0;
-      
-      const dice = new Dice(prng);
-      const result = dice.roll(input, { prng });
+  it('returns 0 given "0d1"', () => {
+    const input = '0d1';
+    const expected_output = 0;
+    
+    const dice = new Dice(prng);
+    const result = dice.roll(input, { prng });
 
-      assert.equal(result.values[0], expected_output);
-    });
+    assert.equal(result.values[0], expected_output);
+  });
 
-    it('returns 0 given "1d0"', () => {
-      const input = '1d0';
-      const expected_output = 0;
-      
-      const dice = new Dice(prng);
-      const result = dice.roll(input, { prng });
+  it('returns 0 given "1d0"', () => {
+    const input = '1d0';
+    const expected_output = 0;
+    
+    const dice = new Dice(prng);
+    const result = dice.roll(input, { prng });
 
-      assert.equal(result.values[0], expected_output);
-    });
+    assert.equal(result.values[0], expected_output);
+  });
 
-    it('with addition: returns 6 given "3d5+3"', () => {
-      const input = '3d5+3';
-      const expected_output = 6;
-      
-      const dice = new Dice(prng);
-      const result = dice.roll(input, { prng });
+  it('returns -1 given "1d-5"', () => {
+    const input = '1d-5';
+    const expected_output = -1;
+    
+    const dice = new Dice(prng);
+    const result = dice.roll(input, { prng });
 
-      assert.equal(result.values[0], expected_output);
-    });
+    assert.equal(result.values[0], expected_output);
+  });
 
-    it('returns 1 given "(1d6)d6"', () => {
-      const input = '(1d6)d6';
-      const expected_output = 1;
-      
-      const dice = new Dice(prng);
-      const result = dice.roll(input, { prng });
+  it('returns 0 given "(-1)d5"', () => {
+    const input = '(-1)d5';
+    const expected_output = -1;
+    
+    const dice = new Dice(prng);
+    const result = dice.roll(input, { prng });
 
-      assert.equal(result.values[0], expected_output);
-    });
+    assert.equal(result.values[0], expected_output);
+  });
+
+  it('basic: returns 10 given "10d10"', () => {
+    const input = '10d10';
+    const expected_output = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+    
+    const dice = new Dice(prng);
+    const result = dice.roll(input, { prng });
+
+    assert.deepEqual(result.values, expected_output);
+  });
+
+  it('with addition: returns 6 given "3d5+3"', () => {
+    const input = '3d5+3';
+    const expected_output = 6;
+    
+    const dice = new Dice(prng);
+    const result = dice.roll(input, { prng });
+
+    assert.equal(result.values[0], expected_output);
+  });
+
+  it('returns 1 given "(1d6)d6"', () => {
+    const input = '(1d6)d6';
+    const expected_output = 1;
+    
+    const dice = new Dice(prng);
+    const result = dice.roll(input, { prng });
+
+    assert.equal(result.values[0], expected_output);
   });
 });
 
@@ -389,5 +405,22 @@ describe('whitespace', () => {
     const result = dice.roll(input);
 
     assert.equal(result.values[0], expected_output);
+  });
+});
+
+describe('variables', () => {
+  it('translates a variable', () => {
+    /*
+    const variables = [
+      ['strength', 5]
+    ];
+    const input = '{strength}';
+    const expected_output = 5;
+      
+    const dice = new Dice();
+    const result = dice.roll(input, { variables });
+
+    assert.equal(result.values[0], expected_output);
+    */
   });
 });

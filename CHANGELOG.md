@@ -8,9 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - [`#5`](https://github.com/REVTTS/Dice/issues/5) - prepare for dot expressions
 - add dot notation to modifiers and functions in readme roadmap 
-- Fixed order of operations
-- Fixed dice rolls that have 0 die to roll
-- Fixed dice rolls that are trying to roll a die of size 0.
+- fixed order of operations
+- fixed dice rolls that have 0 die to roll
+- fixed dice rolls that are trying to roll a die of size 0
+- moved interpretor into Dice constructor
+- moved prng pass to visit instead of interpretor constructor
 
 ## [0.0.7] - 2022-08-30
 ### Changed
