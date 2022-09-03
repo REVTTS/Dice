@@ -80,6 +80,7 @@ export class Dice {
     // Pass our tokens into our parser
     this.parser.input = lex_result.tokens;
     const cst = this.parser.expression();
+    // TODO: check for errors in the parser.
 
     // Interpret the parsed tokens and return the result.
     return this.interpreter.visit(cst, {

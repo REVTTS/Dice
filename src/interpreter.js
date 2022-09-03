@@ -130,10 +130,6 @@ export class Interpreter extends BaseSQLVisitor {
     return binary_expression(ctx, do_divide_values, this.visit.bind(this), options);
   }
 
-  dot_expression(ctx, options) {
-    return this.visit(ctx.expression, options);
-  }
-
   exponential_expression(ctx, options) {
     return binary_expression(ctx, do_exponential_values, this.visit.bind(this), options);
   }

@@ -27,9 +27,14 @@ export const token_operator_ceil = createToken({
   pattern: /ceil/,
 });
 
-export const token_operator_dice = createToken({
+export const token_operator_die = createToken({
   name: 'd',
   pattern: /[dD]/,
+});
+
+export const token_operator_alt_die = createToken({
+  name: 'alt_die',
+  pattern: /.die/,
 });
 
 export const token_operator_divide = createToken({

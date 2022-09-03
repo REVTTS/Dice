@@ -69,21 +69,21 @@ const result = dice.roll('floor(2.5)'); // { value: 3 }
     - mapping: `[[ "strength", 5 ]]`
     - output: `4`
 - [ ] Die
-  - [ ] Alternative Format
-    - `die(1, 20)` - one twenty sided die
-    - `die(10, 5)` - ten five sided dice
+  - [x] Alternative Format
+    - `1.die(20)` - one twenty sided die
+    - `1.die(5)` - ten five sided dice
   - [ ] Fate Dice
     - A regular Fate die has 2 `+`, 2 `-` and 2 blanks on it.
     - `2df` - roll two regular fate dice.
-    - `fate_die(2)`
+    - `2.fate_die`
     - [ ] Variants
       - `2dfv` - Default varaint die, 4 blanks, 1 `+`, and 1 `-`
       - `2df4,1,1` - same as above
-      - `variant_fate_die(2)` - same as above
-      - `fate_die(2, 4, 1, 1)` - same as above
+      - `2.variant_fate_die` - same as above
+      - `2.fate_die(4, 1, 1)` - same as above
   - [ ] Percent Dice
     - `1d%` - basically a 1d100
-    - `percent_die(1)` 
+    - `1.percent_die` 
 - [ ] Die Modifiers / Functions
   - [ ] Comparison
       - [ ] equal to

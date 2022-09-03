@@ -118,6 +118,16 @@ describe('die', () => {
     assert.equal(result.values[0], expected_output);
   });
 
+  it('basic: returns 1 given "1.dice(10)"', () => {
+    const input = '1.die(10)';
+    const expected_output = 1;
+    
+    const dice = new Dice();
+    const result = dice.roll(input, { prng });
+
+    assert.equal(result.values[0], expected_output);
+  });
+
   it('difference die size: returns 1 given "1d100"', () => {
     const input = '1d100';
     const expected_output = 1;
