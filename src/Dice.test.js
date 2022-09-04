@@ -459,3 +459,65 @@ describe('variables', () => {
     assert.equal(result.values[0], expected_output);
   });
 });
+
+describe('outputs', () => {
+  it('Outputs a whole number', () => {
+    const input = '3';
+    const expected_output = ['3'];
+    
+    const dice = new Dice();
+    const result = dice.roll(input);
+
+    assert.deepEqual(result.outputs, expected_output);
+  });
+
+  it('Outputs a unary expression', () => {
+    const input = 'round(3)';
+    const expected_output = ['round(3)','3'];
+    
+    const dice = new Dice();
+    const result = dice.roll(input);
+
+    assert.deepEqual(result.outputs, expected_output);
+  });
+
+  it('Outputs a binary expression', () => {
+    const input = '3+2';
+    const expected_output = ['3+2','5'];
+    
+    const dice = new Dice();
+    const result = dice.roll(input);
+
+    assert.deepEqual(result.outputs, expected_output);
+  });
+
+  it('Outputs a die expression', () => {
+    const input = '3d1';
+    const expected_output = ['3d1','1, 1, 1'];
+    
+    const dice = new Dice();
+    const result = dice.roll(input, { prng: () => 0.1 });
+
+    assert.deepEqual(result.outputs, expected_output);
+  });
+
+  it('Outputs a real number without leading digits', () => {
+    const input = '.5';
+    const expected_output = ['.5', '0.5'];
+    
+    const dice = new Dice();
+    const result = dice.roll(input, { prng: () => 0.1 });
+
+    assert.deepEqual(result.outputs, expected_output);
+  });
+
+  it('Outputs a real number with leading digits', () => {
+    const input = '50.5';
+    const expected_output = ['50.5', '50.5'];
+    
+    const dice = new Dice();
+    const result = dice.roll(input, { prng: () => 0.1 });
+
+    assert.deepEqual(result.outputs, expected_output);
+  });
+});
