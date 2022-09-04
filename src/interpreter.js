@@ -150,7 +150,7 @@ export class Interpreter extends BaseSQLVisitor {
   
       // return our total values together in our own array of values.
       return {
-        outputs: [...zip_outputs([left_hand_visit.outputs, ...right_hand_outputs], 'd'), values.map(value => options.formatter.format_dice_result(value)).join(', ')],
+        outputs: [...zip_outputs([left_hand_visit.outputs, ...right_hand_outputs], 'd'), `[${values.map(value => options.formatter.format_dice_result(value)).join(', ')}]`],
         values,
       };
     }
@@ -187,7 +187,7 @@ export class Interpreter extends BaseSQLVisitor {
   }
 
   parenthesis_expression(ctx, options) {
-    return this.visit(ctx.expression, options);
+    return unary_expression(ctx, (output) => `(${output})`, (input) => input, this.visit.bind(this), options);
   }
 
   real_number_expression(ctx, options) {

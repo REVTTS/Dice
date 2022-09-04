@@ -40,7 +40,9 @@ export class Parser extends CstParser {
     // ordered alphabetically.
     this.RULE('absolute_expression', () => {
       this.CONSUME(operator_tokens.token_operator_absolute, { LABEL: 'operator' });
-      this.SUBRULE(this.parenthesis_expression, { LABEL: 'expression' });
+      this.CONSUME(token_bracket_round_open);
+      this.SUBRULE(this.expression, { LABEL: 'expression' });
+      this.CONSUME(token_bracket_round_close);
     });
 
     this.RULE('addition_expression', () => {
@@ -68,7 +70,9 @@ export class Parser extends CstParser {
 
     this.RULE('ceil_expression', () => {
       this.CONSUME(operator_tokens.token_operator_ceil, { LABEL: 'operator' });
-      this.SUBRULE(this.parenthesis_expression, { LABEL: 'expression' });
+      this.CONSUME(token_bracket_round_open);
+      this.SUBRULE(this.expression, { LABEL: 'expression' });
+      this.CONSUME(token_bracket_round_close);
     });
 
     this.RULE('die_expression', () => {
@@ -84,7 +88,9 @@ export class Parser extends CstParser {
           {
             ALT: () => {
               this.CONSUME(operator_tokens.token_operator_alt_die, { LABEL: 'operator' });
-              this.SUBRULE(this.parenthesis_expression, { LABEL: 'right_hand' });
+              this.CONSUME(token_bracket_round_open);
+              this.SUBRULE(this.expression, { LABEL: 'expression' });
+              this.CONSUME(token_bracket_round_close);
             }
           },
         ]);
@@ -109,7 +115,9 @@ export class Parser extends CstParser {
 
     this.RULE('floor_expression', () => {
       this.CONSUME(operator_tokens.token_operator_floor, { LABEL: 'operator' });
-      this.SUBRULE2(this.parenthesis_expression, { LABEL: 'expression' });
+      this.CONSUME(token_bracket_round_open);
+      this.SUBRULE(this.expression, { LABEL: 'expression' });
+      this.CONSUME(token_bracket_round_close);
     });
 
     this.RULE('minus_expression', () => {
@@ -175,7 +183,9 @@ export class Parser extends CstParser {
 
     this.RULE('round_expression', () => {
       this.CONSUME(operator_tokens.token_operator_round, { LABEL: 'operator' });
-      this.SUBRULE(this.parenthesis_expression, { LABEL: 'expression' });
+      this.CONSUME(token_bracket_round_open);
+      this.SUBRULE(this.expression, { LABEL: 'expression' });
+      this.CONSUME(token_bracket_round_close);
     });
 
     this.RULE('whole_number_expression', () => {

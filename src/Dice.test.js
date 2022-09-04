@@ -494,7 +494,7 @@ describe('outputs', () => {
 
   it('Outputs a die expression', () => {
     const input = '3d1';
-    const expected_output = ['3d1','1, 1, 1'];
+    const expected_output = ['3d1','[1, 1, 1]'];
     
     const dice = new Dice();
     const result = dice.roll(input, { prng: () => 0.1 });
@@ -538,7 +538,7 @@ describe('formatter', () => {
   it('formats a die', () => {
     const markdown_formatter = new MarkdownFormatter();
     const input = '3d1';
-    const expected_output = ['3d1','**1**, **1**, **1**'];
+    const expected_output = ['3d1','[**1**, **1**, **1**]'];
     
     const dice = new Dice();
     const result = dice.roll(input, { formatter: markdown_formatter, prng: () => 0.1 });
@@ -586,6 +586,22 @@ describe('formatter', () => {
     
     const dice = new Dice();
     const result = dice.roll(input, { formatter: markdown_formatter });
+
+    assert.deepEqual(result.outputs, expected_output);
+  });
+
+  it('formats a die with parenthesis and binary expressions', () => {
+    const markdown_formatter = new MarkdownFormatter();
+    const input = '1d20+5+(20-1)';
+    const expected_output = [
+      '1d20+5+(20-1)',
+      '[**2**]+5+(**19**)',
+      '[**2**]+5+**19**',
+      '**26**',
+    ];
+    
+    const dice = new Dice();
+    const result = dice.roll(input, { formatter: markdown_formatter, prng: () => 0.1  });
 
     assert.deepEqual(result.outputs, expected_output);
   });
