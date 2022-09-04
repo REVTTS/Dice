@@ -60,7 +60,7 @@ const result = dice.roll('floor(2.5)'); // { value: 3 }
 
 ### [1.0.0]
 
-- [ ] Formatter
+- [x] Formatter
   - A class that a consume of the library can extend to augment the output of a rolled
   dice.
 - [x] Die variables - A mapping of keys to values that can be passed to Dice.roll().

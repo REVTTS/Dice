@@ -524,7 +524,7 @@ describe('outputs', () => {
 });
 
 
-describe.only('formatter', () => {
+describe('formatter', () => {
   class MarkdownFormatter extends Formatter {
     constructor() {
       super();

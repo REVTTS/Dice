@@ -34,7 +34,7 @@ else
   echo "${GREEN} ✔ Tests${NC}"
 fi
 
-if [ -z "$changelog_file" ]
+if [ -z "$staged_js_files" ] && [ -z "$changelog_file" ]
 then
   changelog_exit_code=1
   echo "${RED} ❌ CHANGELOG.md wasn't changed${NC}"
