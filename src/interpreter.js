@@ -50,7 +50,7 @@ function unary_expression(ctx, operator_wrap_fn, operator_function, visit_functi
   const new_outputs = visit.outputs.map((output) => operator_wrap_fn(output));
 
   return {
-    outputs: [...new_outputs, `${value}`],
+    outputs: [...new_outputs, options.formatter.format_result(`${value}`)],
     values: [value],
   };
 }
@@ -81,7 +81,7 @@ function binary_expression(ctx, operator, operator_function, visit_function, opt
 
     // return our total values together in our own array of values.
     return {
-      outputs: [...zip_outputs([left_hand_visit.outputs, ...right_hand_outputs], operator), `${value}`],
+      outputs: [...zip_outputs([left_hand_visit.outputs, ...right_hand_outputs], operator), options.formatter.format_result(`${value}`)],
       values: [value],
     };
   }
@@ -150,7 +150,7 @@ export class Interpreter extends BaseSQLVisitor {
   
       // return our total values together in our own array of values.
       return {
-        outputs: [...zip_outputs([left_hand_visit.outputs, ...right_hand_outputs], 'd'), values.join(', ')],
+        outputs: [...zip_outputs([left_hand_visit.outputs, ...right_hand_outputs], 'd'), values.map(value => options.formatter.format_dice_result(value)).join(', ')],
         values,
       };
     }
@@ -201,7 +201,7 @@ export class Interpreter extends BaseSQLVisitor {
         const value = do_add_values(left_hand_visit.values) + decimal_value;
 
         return {
-          outputs: [...zip_outputs([left_hand_visit.outputs, right_hand_visit.outputs], '.'), `${value}`],
+          outputs: [...zip_outputs([left_hand_visit.outputs, right_hand_visit.outputs], '.'), options.formatter.format_result(`${value}`)],
           values: [value],
         };
       }
@@ -209,7 +209,7 @@ export class Interpreter extends BaseSQLVisitor {
       const new_outputs = right_hand_visit.outputs.map((output) => `.${output}`);
 
       return {
-        outputs: [...new_outputs, `${decimal_value}`],
+        outputs: [...new_outputs, options.formatter.format_result(`${decimal_value}`)],
         values: [decimal_value],
       };
     }

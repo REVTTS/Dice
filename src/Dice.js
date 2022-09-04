@@ -18,6 +18,7 @@
 import lexer from './lexer.js';
 import { Interpreter } from './interpreter.js';
 import { getParser } from './parser.js';
+import { Formatter } from './Formatter.js';
 
 /**
  * @typedef {Object} RollOutput The output from a roll
@@ -53,7 +54,7 @@ export class Dice {
    * @param {RollOptions} options How to format the image of the RollOutput.
    * @returns {RollOutput} The result of the die being rolled.
    * */
-  roll(input, { prng, variables } = {}) {
+  roll(input, { formatter, prng, variables } = {}) {
     // Tokenize the input with our lexer.
     const lex_result = lexer.tokenize(input);
 
@@ -61,6 +62,9 @@ export class Dice {
       const offset = lex_result.errors[0].offset;
       throw new Error(`Unexpected character "${input.charAt(offset)}" at position: ${offset}`);
     }
+
+    if (!formatter)
+      formatter = new Formatter();
 
     // Do we have a prng? If not, set it to Math.random
     if (!prng)
@@ -84,6 +88,7 @@ export class Dice {
 
     // Interpret the parsed tokens and return the result.
     return this.interpreter.visit(cst, {
+      formatter,
       prng,
       variables: variable_map
     });

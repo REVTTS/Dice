@@ -20,6 +20,7 @@ import assert from 'assert';
 import { describe, it } from 'mocha';
 
 import { Dice } from './Dice.js';
+import { Formatter } from './Formatter.js';
 
 describe('algebra', () => {
   describe('addition', () => {
@@ -517,6 +518,74 @@ describe('outputs', () => {
     
     const dice = new Dice();
     const result = dice.roll(input, { prng: () => 0.1 });
+
+    assert.deepEqual(result.outputs, expected_output);
+  });
+});
+
+
+describe.only('formatter', () => {
+  class MarkdownFormatter extends Formatter {
+    constructor() {
+      super();
+    }
+  
+    format_result(input) {
+      return `**${input}**`;
+    }
+  }
+
+  it('formats a die', () => {
+    const markdown_formatter = new MarkdownFormatter();
+    const input = '3d1';
+    const expected_output = ['3d1','**1**, **1**, **1**'];
+    
+    const dice = new Dice();
+    const result = dice.roll(input, { formatter: markdown_formatter, prng: () => 0.1 });
+
+    assert.deepEqual(result.outputs, expected_output);
+  });
+
+  it('formats the result of a unary expression', () => {
+    const markdown_formatter = new MarkdownFormatter();
+    const input = 'round(3)';
+    const expected_output = ['round(3)','**3**'];
+    
+    const dice = new Dice();
+    const result = dice.roll(input, { formatter: markdown_formatter });
+
+    assert.deepEqual(result.outputs, expected_output);
+  });
+
+  it('formats the result of a binary expression', () => {
+    const markdown_formatter = new MarkdownFormatter();
+    const input = '3+1';
+    const expected_output = ['3+1','**4**'];
+    
+    const dice = new Dice();
+    const result = dice.roll(input, { formatter: markdown_formatter });
+
+    assert.deepEqual(result.outputs, expected_output);
+  });
+
+  it('formats a real number without leading digits', () => {
+    const markdown_formatter = new MarkdownFormatter();
+    const input = '.5';
+    const expected_output = ['.5','**0.5**'];
+    
+    const dice = new Dice();
+    const result = dice.roll(input, { formatter: markdown_formatter });
+
+    assert.deepEqual(result.outputs, expected_output);
+  });
+
+  it('formats a real number with leading digits', () => {
+    const markdown_formatter = new MarkdownFormatter();
+    const input = '50.5';
+    const expected_output = ['50.5','**50.5**'];
+    
+    const dice = new Dice();
+    const result = dice.roll(input, { formatter: markdown_formatter });
 
     assert.deepEqual(result.outputs, expected_output);
   });
