@@ -15,7 +15,7 @@
   "types:": "./types/index.d.ts",
   "scripts": {
     "build": "rollup -c --environment BUILD:production",
-    "lint": "eslint src/**",
+    "lint": "eslint 'src/**/*.js'",
     "setup": "husky install",
     "prepack": "yarn build",
     "test": "mocha 'src/**/*.test.js'"

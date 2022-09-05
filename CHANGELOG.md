@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [unreleased]
 ## Added
 - added copyright notice to Formatter.js
+
+## changed
 - make dot expressions have a high precedence
+- refactored interpreter.js out into several helper functions and files
 
 ## [0.0.11]
 ### Changed

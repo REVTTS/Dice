@@ -17,77 +17,21 @@
 
 import parser from './parser.js';
 
+import { do_add_values } from './interpreter/do_add_values.js';
+import { do_die_values } from './interpreter/do_die_values.js';
+import { do_divide_values } from './interpreter/do_divide_values.js';
+import { do_exponential_values } from './interpreter/do_exponential_values.js';
+import { do_minus_values } from './interpreter/do_minus_values.js';
+import { do_modulus_values } from './interpreter/do_modulus_values.js';
+import { do_multiply_values } from './interpreter/do_multiply_values.js';
+
+import { visit_binary_expression } from './interpreter/visit_binary_expression.js';
+import { visit_unary_expression } from './interpreter/visit_unary_expression.js';
+
+import { zip_outputs } from './interpreter/zip_outputs.js';
+import { visit_dot_expression } from './interpreter/visit_dot_expression.js';
+
 const BaseSQLVisitor = parser.getBaseCstVisitorConstructorWithDefaults();
-
-const zip_outputs = (arrays, operator_wrap_fn) => {
-  const array_one = arrays.shift();
-  const array_two = arrays.shift();
-
-  const zipped_output = Array.from(
-    Array(
-      Math.max(array_one.length, array_two.length)
-    ),
-    (_, i) => {
-      const array_one_value = array_one[i] || array_one[array_one.length-1];
-      const array_two_value = array_two[i] || array_two[array_two.length-1];
-
-      return `${array_one_value}${operator_wrap_fn(array_two_value)}`;
-    }
-  );
-
-  if (arrays.length > 0) {
-    return zip_outputs([zipped_output, ...arrays], operator_wrap_fn);
-  }
-
-  return zipped_output;
-};
-
-function unary_expression(ctx, operator_wrap_fn, operator_function, visit_function, options) {
-  const visit = visit_function(ctx.expression, options);
-  const visit_value = do_add_values(visit.values);
-  const value = operator_function(visit_value);
-
-  const new_outputs = visit.outputs.map((output) => operator_wrap_fn(output));
-
-  return {
-    outputs: [...new_outputs, options.formatter.format_result(`${value}`)],
-    values: [value],
-  };
-}
-
-const do_add_values = values => values.reduce((accumulator, value) => (accumulator + value));
-const do_divide_values = values => values.reduce((accumulator, value) => (accumulator / value));
-const do_exponential_values = values => values.reduce((accumulator, value) => (accumulator ** value));
-const do_minus_values = values => values.reduce((accumulator, value) => (accumulator - value));
-const do_modulus_values = values => values.reduce((accumulator, value) => (accumulator % value));
-const do_multiply_values = values => values.reduce((accumulator, value) => (accumulator * value));
-
-function binary_expression(ctx, operator_wrap_fn, operator_function, visit_function, options) {
-  let left_hand_visit = visit_function(ctx.left_hand, options);
-
-  if (ctx.right_hand) {
-    // Visit each item in the right hand array.
-    const right_hand_visits = ctx.right_hand.map(right_hand => visit_function(right_hand, options));
-    const right_hand_outputs = right_hand_visits.map(right_hand_visit => right_hand_visit.outputs);
-
-    // We've got an array of an array of values.
-    // So we condense it down to an array of values.
-    const right_hand_values = right_hand_visits.map(visit => do_add_values(visit.values));
-
-    const value = operator_function([
-      do_add_values(left_hand_visit.values),
-      ...right_hand_values
-    ]);
-
-    // return our total values together in our own array of values.
-    return {
-      outputs: [...zip_outputs([left_hand_visit.outputs, ...right_hand_outputs], operator_wrap_fn), options.formatter.format_result(`${value}`)],
-      values: [value],
-    };
-  }
-
-  return left_hand_visit;
-}
 
 export class Interpreter extends BaseSQLVisitor {
   constructor() {
@@ -103,11 +47,11 @@ export class Interpreter extends BaseSQLVisitor {
   // Interpreter methods are ordered alphabetically.
 
   absolute_expression(ctx, options) {
-    return unary_expression(ctx, (output) => `abs(${output})`, Math.abs, this.visit.bind(this), options);
+    return visit_unary_expression(ctx, (output) => `abs(${output})`, Math.abs, this.visit.bind(this), options);
   }
 
   addition_expression(ctx, options) {
-    return binary_expression(ctx, input => `+${input}`, do_add_values, this.visit.bind(this), options);
+    return visit_binary_expression(ctx, input => `+${input}`, do_add_values, this.visit.bind(this), options);
   }
 
   atomic_expression(ctx, options) {
@@ -115,47 +59,11 @@ export class Interpreter extends BaseSQLVisitor {
   }
 
   ceil_expression(ctx, options) {
-    return unary_expression(ctx, (output) => `ceil(${output})`, Math.ceil, this.visit.bind(this), options);
+    return visit_unary_expression(ctx, (output) => `ceil(${output})`, Math.ceil, this.visit.bind(this), options);
   }
 
   die_expression(ctx, options) {
-    const left_hand_visit = this.visit(ctx.left_hand, options);
-  
-    if (ctx.right_hand) {
-      // Visit each item in the right hand array.
-      const right_hand_visits = ctx.right_hand.map(right_hand => this.visit(right_hand, options));
-      const right_hand_outputs = right_hand_visits.map(right_hand_visit => right_hand_visit.outputs);
-  
-      // We've got an array of an array of values.
-      // So we condense it down to an array of values.
-      const right_hand_values = right_hand_visits.map(visit => do_add_values(visit.values));
-
-      const values = right_hand_values.reduce((previous_values, die_size) => {
-        let num_dice = do_add_values(previous_values);
-        const sign = Math.sign(num_dice) * Math.sign(die_size);
-
-        if (sign === 0)
-          return [0];
-  
-        const next_values = [];
-        num_dice = Math.abs(num_dice);
-        for (let i = 0; i < num_dice; i++)
-          next_values.push(sign * Math.floor(options.prng() * Math.abs(die_size) + .9999));
-
-        return next_values;
-      }, left_hand_visit.values);
-
-      if (values.length === 0)
-        values.push(0);
-  
-      // return our total values together in our own array of values.
-      return {
-        outputs: [...zip_outputs([left_hand_visit.outputs, ...right_hand_outputs], input => `d${input}`), `[${values.map(value => options.formatter.format_dice_result(value)).join(', ')}]`],
-        values,
-      };
-    }
-  
-    return left_hand_visit;
+    return visit_binary_expression(ctx, input => `d${input}`, do_die_values(options.prng), this.visit.bind(this), options);
   }
 
   dot_expression(ctx, options) {
@@ -173,77 +81,53 @@ export class Interpreter extends BaseSQLVisitor {
   }
 
   dot_die_expression(ctx, options) {
-    const visit = this.visit(ctx.expression, options);
-
-    let num_dice = do_add_values(options.accumulator.values);
-    const die_size = do_add_values(visit.values);
-    const sign = Math.sign(num_dice) * Math.sign(die_size);
-
-    if (sign === 0)
-      return {
-        outputs: [],
-        values: [0]
-      };
-
-    const next_values = [];
-    num_dice = Math.abs(num_dice);
-    for (let i = 0; i < num_dice; i++)
-      next_values.push(sign * Math.floor(options.prng() * Math.abs(die_size) + .9999));
-
-
-    if (next_values.length === 0)
-      next_values.push(0);
-
-    return {
-      outputs: [...zip_outputs([options.accumulator.outputs, ...visit.outputs], input => `.die(${input})`)],
-      values: next_values,
-    };
+    return visit_dot_expression(ctx, input => `.die(${input})`, do_die_values(options.prng), this.visit.bind(this), options);
   }
 
   divide_expression(ctx, options) {
-    return binary_expression(ctx, input => `/${input}`, do_divide_values, this.visit.bind(this), options);
+    return visit_binary_expression(ctx, input => `/${input}`, do_divide_values, this.visit.bind(this), options);
   }
 
   exponential_expression(ctx, options) {
-    return binary_expression(ctx, input => `**${input}`, do_exponential_values, this.visit.bind(this), options);
+    return visit_binary_expression(ctx, input => `**${input}`, do_exponential_values, this.visit.bind(this), options);
   }
 
   floor_expression(ctx, options) {
-    return unary_expression(ctx, (output) => `floor(${output})`, Math.floor, this.visit.bind(this), options);
+    return visit_unary_expression(ctx, (output) => `floor(${output})`, Math.floor, this.visit.bind(this), options);
   }
 
   minus_expression(ctx, options) {
-    return binary_expression(ctx, input => `-${input}`,  do_minus_values, this.visit.bind(this), options);
+    return visit_binary_expression(ctx, input => `-${input}`,  do_minus_values, this.visit.bind(this), options);
   }
 
   modulus_expression(ctx, options) {
-    return binary_expression(ctx, input => `%${input}`, do_modulus_values, this.visit.bind(this), options);
+    return visit_binary_expression(ctx, input => `%${input}`, do_modulus_values, this.visit.bind(this), options);
   }
 
   multiply_expression(ctx, options) {
-    return binary_expression(ctx, input => `*${input}`, do_multiply_values, this.visit.bind(this), options);
+    return visit_binary_expression(ctx, input => `*${input}`, do_multiply_values, this.visit.bind(this), options);
   }
 
   negative_number_expression(ctx, options) {
-    return unary_expression(ctx, (output) => `-${output}`, (input) => -input, this.visit.bind(this), options);
+    return visit_unary_expression(ctx, (output) => `-${output}`, (input) => -input, this.visit.bind(this), options);
   }
 
   parenthesis_expression(ctx, options) {
-    return unary_expression(ctx, (output) => `(${output})`, (input) => input, this.visit.bind(this), options);
+    return visit_unary_expression(ctx, (output) => `(${output})`, (input) => input, this.visit.bind(this), options);
   }
 
   real_number_expression(ctx, options) {
     if (ctx.right_hand) {
       const right_hand_visit = this.visit(ctx.right_hand, options);
       const num_digits = right_hand_visit.values.length;
-      const decimal_value = do_add_values(right_hand_visit.values) / (10 ** num_digits);
+      const decimal_value = right_hand_visit.values.reduce((accumulator, value) => accumulator + value) / (10 ** num_digits);
 
       if (ctx.left_hand) {
         const left_hand_visit = this.visit(ctx.left_hand, options);
-        const value = do_add_values(left_hand_visit.values) + decimal_value;
+        const value = left_hand_visit.values.reduce((accumulator, value) => accumulator + value) + decimal_value;
 
         return {
-          outputs: [...zip_outputs([left_hand_visit.outputs, right_hand_visit.outputs], input => `.${input}`), options.formatter.format_result(`${value}`)],
+          outputs: [...zip_outputs([left_hand_visit.outputs, right_hand_visit.outputs], input => `.${input}`), options.formatter.format_result(value)],
           values: [value],
         };
       }
@@ -251,7 +135,7 @@ export class Interpreter extends BaseSQLVisitor {
       const new_outputs = right_hand_visit.outputs.map((output) => `.${output}`);
 
       return {
-        outputs: [...new_outputs, options.formatter.format_result(`${decimal_value}`)],
+        outputs: [...new_outputs, options.formatter.format_result(decimal_value)],
         values: [decimal_value],
       };
     }
@@ -260,7 +144,7 @@ export class Interpreter extends BaseSQLVisitor {
   }
 
   round_expression(ctx, options) {
-    return unary_expression(ctx, (output) => `round(${output})`, Math.round, this.visit.bind(this), options);
+    return visit_unary_expression(ctx, (output) => `round(${output})`, Math.round, this.visit.bind(this), options);
   }
 
   whole_number_expression(ctx) {
@@ -273,7 +157,7 @@ export class Interpreter extends BaseSQLVisitor {
     }
 
     return {
-      outputs: [`${do_add_values(values)}`],
+      outputs: [`${values.reduce((accumulator, value) => accumulator + value)}`],
       values,
     };
   }
