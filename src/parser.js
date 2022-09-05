@@ -78,22 +78,8 @@ export class Parser extends CstParser {
     this.RULE('die_expression', () => {
       this.SUBRULE(this.real_number_expression, { LABEL: 'left_hand' });
       this.MANY(() => {
-        this.OR([
-          {
-            ALT: () => {
-              this.CONSUME(operator_tokens.token_operator_die, { LABEL: 'operator' });
-              this.SUBRULE2(this.real_number_expression, { LABEL: 'right_hand' });
-            }
-          },
-          {
-            ALT: () => {
-              this.CONSUME(operator_tokens.token_operator_alt_die, { LABEL: 'operator' });
-              this.CONSUME(token_bracket_round_open);
-              this.SUBRULE(this.expression, { LABEL: 'expression' });
-              this.CONSUME(token_bracket_round_close);
-            }
-          },
-        ]);
+        this.CONSUME(operator_tokens.token_operator_die, { LABEL: 'operator' });
+        this.SUBRULE2(this.real_number_expression, { LABEL: 'right_hand' });
       });
     });
 
@@ -103,6 +89,22 @@ export class Parser extends CstParser {
         this.CONSUME(operator_tokens.token_operator_divide, { LABEL: 'operator' });
         this.SUBRULE2(this.multiply_expression, { LABEL: 'right_hand' });
       });
+    });
+
+    this.RULE('dot_expression', () => {
+      this.SUBRULE(this.atomic_expression, { LABEL: 'left_hand'});
+      this.MANY(() => {
+        this.OR([
+          { ALT: () => { this.SUBRULE(this.dot_die_expression, { LABEL: 'right_hand' }); } },
+        ]);
+      });
+    });
+
+    this.RULE('dot_die_expression', () => {
+      this.CONSUME(operator_tokens.token_operator_alt_die, { LABEL: 'operator' });
+      this.CONSUME(token_bracket_round_open);
+      this.SUBRULE(this.expression, { LABEL: 'expression' });
+      this.CONSUME(token_bracket_round_close);
     });
 
     this.RULE('exponential_expression', () => {
@@ -159,14 +161,14 @@ export class Parser extends CstParser {
       this.OR([
         {
           ALT: () => {
-            this.SUBRULE(this.atomic_expression, { LABEL: 'left_hand'});
+            this.SUBRULE(this.dot_expression, { LABEL: 'left_hand'});
             // Real number with a leading expression.
             // ie. "1.05"
             // Unlike most other expressions, this is not a MANY.
             // 1.05.05 doesn't make sense afaik.
             this.OPTION(() => {
               this.CONSUME(operator_tokens.token_operator_dot, { LABEL: 'operator' });
-              this.SUBRULE2(this.atomic_expression, { LABEL: 'right_hand'});
+              this.SUBRULE2(this.dot_expression, { LABEL: 'right_hand'});
             });
           }
         },
@@ -175,7 +177,7 @@ export class Parser extends CstParser {
         {
           ALT: () => {
             this.CONSUME2(operator_tokens.token_operator_dot, { LABEL: 'operator' });
-            this.SUBRULE3(this.atomic_expression, { LABEL: 'right_hand'});
+            this.SUBRULE3(this.dot_expression, { LABEL: 'right_hand'});
           }
         },
       ]);

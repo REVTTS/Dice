@@ -34,7 +34,7 @@ export const token_operator_die = createToken({
 
 export const token_operator_alt_die = createToken({
   name: 'alt_die',
-  pattern: /.die/,
+  pattern: /\.die/,
 });
 
 export const token_operator_divide = createToken({
