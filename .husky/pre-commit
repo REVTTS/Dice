@@ -5,14 +5,13 @@ RED="\033[1;31m"
 GREEN="\033[1;32m"
 NC="\033[0m"
 
-staged_js_files=$(git diff --cached --diff-filter=d --name-only "./src/**/*.js"$)
-changelog_file=$(git diff --cached --diff-filter=d --name-only CHANGELOG.md)
+staged_files=$(git diff --cached --name-only)
 
 changelog_exit_code=0
 linter_exit_code=0
 test_exit_code=0
 
-if [ -z "$staged_js_files" ]
+if ! [ -z "$staged_files" ]
 then
   yarn lint
   linter_exit_code=$?
@@ -34,15 +33,7 @@ else
   echo "${GREEN} ✔ Tests${NC}"
 fi
 
-if [ -z "$staged_js_files" ] && [ -z "$changelog_file" ]
-then
-  changelog_exit_code=1
-  echo "${RED} ❌ CHANGELOG.md wasn't changed${NC}"
-else
-  echo "${GREEN} ✔ CHANGELOG.md${NC}"
-fi
-
-if [ $(($linter_exit_code + $test_exit_code + $changelog_exit_code)) -ne 0 ]
+if [ $(($linter_exit_code + $test_exit_code)) -ne 0 ]
 then
   exit 1
 fi
