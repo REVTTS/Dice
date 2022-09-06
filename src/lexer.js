@@ -41,4 +41,7 @@ const tokens = [
   token_string,
 ];
 
-export default new Lexer(tokens);
+export default new Lexer(
+  tokens,
+  { ensureOptimizations: true }
+);

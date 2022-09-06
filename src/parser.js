@@ -56,16 +56,19 @@ export class Parser extends CstParser {
     // Atomic might not be the right name here.
     // Need to do some reading
     this.RULE('atomic_expression', () => {
-      this.OR([
-        { ALT: () => this.SUBRULE(this.absolute_expression, { LABEL: 'expression' }) },
-        { ALT: () => this.SUBRULE(this.ceil_expression, { LABEL: 'expression' }) },
-        { ALT: () => this.SUBRULE(this.floor_expression, { LABEL: 'expression' }) },
-        { ALT: () => this.SUBRULE(this.negative_number_expression, { LABEL: 'expression' }) },
-        { ALT: () => this.SUBRULE(this.parenthesis_expression, { LABEL: 'expression' }) },
-        { ALT: () => this.SUBRULE(this.round_expression, { LABEL: 'expression' }) },
-        { ALT: () => this.SUBRULE(this.variable_expression, { LABEL: 'expression' }) },
-        { ALT: () => this.SUBRULE(this.whole_number_expression, { LABEL: 'expression' }) },
-      ]);
+      this.OR(
+        this.atomic_expression_cache ||
+        (this.atomic_expression_cache = [
+          { ALT: () => this.SUBRULE(this.absolute_expression, { LABEL: 'expression' }) },
+          { ALT: () => this.SUBRULE(this.ceil_expression, { LABEL: 'expression' }) },
+          { ALT: () => this.SUBRULE(this.floor_expression, { LABEL: 'expression' }) },
+          { ALT: () => this.SUBRULE(this.negative_number_expression, { LABEL: 'expression' }) },
+          { ALT: () => this.SUBRULE(this.parenthesis_expression, { LABEL: 'expression' }) },
+          { ALT: () => this.SUBRULE(this.round_expression, { LABEL: 'expression' }) },
+          { ALT: () => this.SUBRULE(this.variable_expression, { LABEL: 'expression' }) },
+          { ALT: () => this.SUBRULE(this.whole_number_expression, { LABEL: 'expression' }) },
+        ])
+      );
     });
 
     this.RULE('ceil_expression', () => {
@@ -195,18 +198,21 @@ export class Parser extends CstParser {
     });
 
     this.RULE('whole_number', () => {
-      this.OR([
-        { ALT: () => this.SUBRULE(this.whole_number_zero) },
-        { ALT: () => this.SUBRULE(this.whole_number_one) },
-        { ALT: () => this.SUBRULE(this.whole_number_two) },
-        { ALT: () => this.SUBRULE(this.whole_number_three) },
-        { ALT: () => this.SUBRULE(this.whole_number_four) },
-        { ALT: () => this.SUBRULE(this.whole_number_five) },
-        { ALT: () => this.SUBRULE(this.whole_number_six) },
-        { ALT: () => this.SUBRULE(this.whole_number_seven) },
-        { ALT: () => this.SUBRULE(this.whole_number_eight) },
-        { ALT: () => this.SUBRULE(this.whole_number_nine) },
-      ]);
+      this.OR(
+        this.whole_number_cache ||
+        (this.whole_number_cache = [
+          { ALT: () => this.SUBRULE(this.whole_number_zero) },
+          { ALT: () => this.SUBRULE(this.whole_number_one) },
+          { ALT: () => this.SUBRULE(this.whole_number_two) },
+          { ALT: () => this.SUBRULE(this.whole_number_three) },
+          { ALT: () => this.SUBRULE(this.whole_number_four) },
+          { ALT: () => this.SUBRULE(this.whole_number_five) },
+          { ALT: () => this.SUBRULE(this.whole_number_six) },
+          { ALT: () => this.SUBRULE(this.whole_number_seven) },
+          { ALT: () => this.SUBRULE(this.whole_number_eight) },
+          { ALT: () => this.SUBRULE(this.whole_number_nine) },
+        ])
+      );
     });
 
     this.RULE('whole_number_zero', () => {
